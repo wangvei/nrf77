@@ -12,33 +12,11 @@
 |  2.3  | [`ludcmp`](ludcmp.f) | linear equation solution, LU decomposition |
 |  2.3  | [`lubksb`](lubksb.f) | linear equation solution, backsubstitution |
 |  2.4  | [`tridag`](tridag.f) | solution of tridiagonal systems |
-|  2.4  | [`banmul`](banmul.f) | multiply vector by band diagonal matrix |
-|  2.4  | [`bandec`](bandec.f) | band diagonal systems, decomposition |
-|  2.4  | [`banbks`](banbks.f) | band diagonal systems, backsubstitution |
 |  2.5  | [`mprove`](mprove.f) | linear equation solution, iterative improvement |
 |  2.6  | [`svbksb`](svbksb.f) | singular value backsubstitution |
 |  2.6  | [`svdcmp`](svdcmp.f) | singular value decomposition of a matrix |
-|  2.6  | [`pythag`](pythag.f) | calculate (a2 + b2)1=2 without overflow |
-|  2.7  | [`cyclic`](cyclic.f) | solution of cyclic tridiagonal systems |
-|  2.7  | [`sprsin`](sprsin.f) | convert matrix to sparse format |
-|  2.7  | [`sprsax`](sprsax.f) | product of sparse matrix and vector |
-|  2.7  | [`sprstx`](sprstx.f) | product of transpose sparse matrix and vector |
-|  2.7  | [`sprstp`](sprstp.f) | transpose of sparse matrix |
-|  2.7  | [`sprspm`](sprspm.f) | pattern multiply two sparse matrices |
-|  2.7  | [`sprstm`](sprstm.f) | threshold multiply two sparse matrices |
-|  2.7  | [`linbcg`](linbcg.f) | biconjugate gradient solution of sparse systems |
-|  2.7  | [`snrm  `](snrm.f)   | used by linbcg for vector norm |
-|  2.7  | [`atimes`](atimes.f) | used by linbcg for sparse multiplication |
-|  2.7  | [`asolve`](asolve.f) | used by linbcg for preconditioner |
 |  2.8  | [`vander`](vander.f) | solve Vandermonde systems |
 |  2.8  | [`toeplz`](toeplz.f) | solve Toeplitz systems |
-|  2.9  | [`choldc`](choldc.f) | Cholesky decomposition |
-|  2.9  | [`cholsl`](cholsl.f) | Cholesky backsubstitution |
-|  2.10 | [`qrdcmp`](qrdcmp.f) | QR decomposition |
-|  2.10 | [`qrsolv`](qrsolv.f) | QR backsubstitution |
-|  2.10 | [`rsolv `](rsolv.f)  | right triangular backsubstitution |
-|  2.10 | [`qrupdt`](qrupdt.f) | update a QR decomposition |
-|  2.10 | [`rotate`](rotate.f) | Jacobi rotation used by qrupdt |
 |  3.1  | [`polint`](polint.f) | polynomial interpolation |
 |  3.2  | [`ratint`](ratint.f) | rational function interpolation |
 |  3.3  | [`spline`](spline.f) | construct a cubic spline |
@@ -59,31 +37,18 @@
 |  4.4  | [`midpnt`](midpnt.f) | extended midpoint rule |
 |  4.4  | [`qromo `](qromo.f)  | integrate using open Romberg adaptive method |
 |  4.4  | [`midinf`](midinf.f) | integrate a function on a semi-infinite interval |
-|  4.4  | [`midsql`](midsql.f) | integrate a function with lower square-root singularity |
-|  4.4  | [`midsqu`](midsqu.f) | integrate a function with upper square-root singularity |
-|  4.4  | [`midexp`](midexp.f) | integrate a function that decreases exponentially |
 |  4.5  | [`qgaus `](qgaus.f)  | integrate a function by Gaussian quadratures |
 |  4.5  | [`gauleg`](gauleg.f) | Gauss-Legendre weights and abscissas |
-|  4.5  | [`gaulag`](gaulag.f) | Gauss-Laguerre weights and abscissas |
-|  4.5  | [`gauher`](gauher.f) | Gauss-Hermite weights and abscissas |
-|  4.5  | [`gaujac`](gaujac.f) | Gauss-Jacobi weights and abscissas |
-|  4.5  | [`gaucof`](gaucof.f) | quadrature weights from orthogonal polynomials |
-|  4.5  | [`orthog`](orthog.f) | construct nonclassical orthogonal polynomials |
 |  4.6  | [`quad3d`](quad3d.f) | integrate a function over a three-dimensional space |
 |  5.1  | [`eulsum`](eulsum.f) | sum a series by Eulervan Wijngaarden algorithm |
 |  5.3  | [`ddpoly`](ddpoly.f) | evaluate a polynomial and its derivatives |
 |  5.3  | [`poldiv`](poldiv.f) | divide one polynomial by another |
-|  5.3  | [`ratval`](ratval.f) | evaluate a rational function |
-|  5.7  | [`dfridr`](dfridr.f) | numerical derivative by Ridders’ method |
 |  5.8  | [`chebft`](chebft.f) | fit a Chebyshev polynomial to a function |
 |  5.8  | [`chebev`](chebev.f) | Chebyshev polynomial evaluation |
 |  5.9  | [`chder `](chder.f)  | derivative of a function already Chebyshev fitted |
 |  5.9  | [`chint `](chint.f)  | integrate a function already Chebyshev fitted |
 |  5.10 | [`chebpc`](chebpc.f) | polynomial coefficients from a Chebyshev fit |
 |  5.10 | [`pcshft`](pcshft.f) | polynomial coefficients of a shifted polynomial |
-|  5.11 | [`pccheb`](pccheb.f) | inverse of chebpc; use to economize power series |
-|  5.12 | [`pade  `](pade.f)   | Pad´e approximant from power series coefficients |
-|  5.13 | [`ratlsq`](ratlsq.f) | rational fit by least-squares method |
 |  6.1  | [`gammln`](gammln.f) | logarithm of gamma function |
 |  6.1  | [`factrl`](factrl.f) | factorial function |
 |  6.1  | [`bico  `](bico.f)   | binomial coefficients function |
@@ -96,8 +61,6 @@
 |  6.2  | [`erf   `](erf.f)    | error function |
 |  6.2  | [`erfc  `](erfc.f)   | complementary error function |
 |  6.2  | [`erfcc `](erfcc.f)  | complementary error function, concise routine |
-|  6.3  | [`expint`](expint.f) | exponential integral En |
-|  6.3  | [`ei    `](ei.f)     | exponential integral Ei |
 |  6.4  | [`betai `](betai.f)  | incomplete beta function |
 |  6.4  | [`betacf`](betacf.f) | continued fraction used by betai |
 |  6.5  | [`bessj0`](bessj0.f) | Bessel function J0 |
@@ -112,26 +75,8 @@
 |  6.6  | [`bessk1`](bessk1.f) | modified Bessel function K1 |
 |  6.6  | [`bessk `](bessk.f)  | modified Bessel function K of integer order |
 |  6.6  | [`bessi `](bessi.f)  | modified Bessel function I of integer order |
-|  6.7  | [`bessjy`](bessjy.f) | Bessel functions of fractional order |
-|  6.7  | [`beschb`](beschb.f) | Chebyshev expansion used by bessjy |
-|  6.7  | [`bessik`](bessik.f) | modified Bessel functions of fractional order |
-|  6.7  | [`airy  `](airy.f)   | Airy functions |
-|  6.7  | [`sphbes`](sphbes.f) | spherical Bessel functions jn and yn |
 |  6.8  | [`plgndr`](plgndr.f) | Legendre polynomials, associated (spherical harmonics) |
-|  6.9  | [`frenel`](frenel.f) | Fresnel integrals S(x) and C(x) |
-|  6.9  | [`cisi  `](cisi.f)   | cosine and sine integrals Ci and Si |
-|  6.10 | [`dawson`](dawson.f) | Dawson’s integral |
-|  6.11 | [`rf    `](rf.f)     | Carlson’s elliptic integral of the first kind |
-|  6.11 | [`rd    `](rd.f)     | Carlson’s elliptic integral of the second kind |
-|  6.11 | [`rj    `](rj.f)     | Carlson’s elliptic integral of the third kind |
-|  6.11 | [`rc    `](rc.f)     | Carlson’s degenerate elliptic integral |
-|  6.11 | [`ellf  `](ellf.f)   | Legendre elliptic integral of the first kind |
-|  6.11 | [`elle  `](elle.f)   | Legendre elliptic integral of the second kind |
-|  6.11 | [`ellpi `](ellpi.f)  | Legendre elliptic integral of the third kind |
 |  6.11 | [`sncndn`](sncndn.f) | Jacobian elliptic functions |
-|  6.12 | [`hypgeo`](hypgeo.f) | complex hypergeometric function |
-|  6.12 | [`hypser`](hypser.f) | complex hypergeometric function, series evaluation |
-|  6.12 | [`hypdrv`](hypdrv.f) | complex hypergeometric function, derivative of |
 |  7.1  | [`ran0  `](ran0.f)   | random deviate by Park and Miller minimal standard |
 |  7.1  | [`ran1  `](ran1.f)   | random deviate, minimal standard plus shuffle |
 |  7.1  | [`ran2  `](ran2.f)   | random deviate by L’Ecuyer long period plus shuffle |
