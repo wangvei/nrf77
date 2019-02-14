@@ -1,0 +1,29 @@
+	PROGRAM D13R14
+C	Driver for routine CNTAB2
+C	Contingency table in file TABLE.DAT
+	PARAMETER(NI=9,NMON=12)
+	DIMENSION NMBR(NI,NMON)
+	CHARACTER FATE(NI)*15,MON(NMON)*5,TEXT*64
+	OPEN(5,FILE='TABLE.DAT',STATUS='OLD')
+	READ(5,*)
+	READ(5,'(A)') TEXT
+	READ(5,'(15X,12A5/)') (MON(I),I=1,12)
+	DO 11 I=1,NI
+		READ(5,'(A15,12I5)') FATE(I),(NMBR(I,J),J=1,12)
+11	CONTINUE
+	CLOSE(5)
+	WRITE(*,'(/1X,A/)') TEXT
+	WRITE(*,'(1X,15X,12A5)') (MON(I),I=1,12)
+	DO 12 I=1,NI
+		WRITE(*,'(1X,A,12I5)') FATE(I),(NMBR(I,J),J=1,12)
+12	CONTINUE
+	CALL CNTAB2(NMBR,NI,NMON,H,HX,HY,HYGX,HXGY,UYGX,UXGY,UXY)
+	WRITE(*,'(/1X,A,T30,F10.4)') 'Entropy of Table',H
+	WRITE(*,'(1X,A,T30,F10.4)') 'Entropy of x-distribution',HX
+	WRITE(*,'(1X,A,T30,F10.4)') 'Entropy of y-distribution',HY
+	WRITE(*,'(1X,A,T30,F10.4)') 'Entropy of y given x',HYGX
+	WRITE(*,'(1X,A,T30,F10.4)') 'Entropy of x given y',HXGY
+	WRITE(*,'(1X,A,T30,F10.4)') 'Dependency of y on x',UYGX
+	WRITE(*,'(1X,A,T30,F10.4)') 'Dependency of x on y',UXGY
+	WRITE(*,'(1X,A,T30,F10.4/)') 'Symmetrical dependency',UXY
+	END

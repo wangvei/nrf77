@@ -1,0 +1,16 @@
+	PROGRAM D6R6
+C	Driver for routine GAMMP
+	CHARACTER TEXT*25
+	OPEN(5,FILE='FNCVAL.DAT',STATUS='OLD')
+10	READ(5,'(A)') TEXT
+	IF (TEXT.NE.'Incomplete Gamma Function') GOTO 10
+	READ(5,*) NVAL
+	WRITE(*,*) TEXT
+	WRITE(*,'(1X,T5,A,T16,A,T25,A,T35,A)')
+     *		'A','X','Actual','GAMMP(A,X)'
+	DO 11 I=1,NVAL
+		READ(5,*) A,X,VALUE
+		WRITE(*,'(1X,F6.2,3F12.6)') A,X,VALUE,GAMMP(A,X)
+11	CONTINUE
+	CLOSE(5)
+	END

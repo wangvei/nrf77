@@ -1,0 +1,62 @@
+	PROGRAM D2R1
+C	Driver program for subroutine GAUSSJ
+C	Reads Matrices from file MATRIX.DAT and feeds them to GAUSSJ
+	PARAMETER(NP=20)
+	DIMENSION A(NP,NP),B(NP,NP),AI(NP,NP),X(NP,NP)
+	DIMENSION U(NP,NP),T(NP,NP)
+	CHARACTER DUMMY*3
+	OPEN(5,FILE='MATRX1.DAT',STATUS='OLD')
+10	READ(5,'(A)') DUMMY
+	IF (DUMMY.EQ.'END') GOTO 99
+	READ(5,*)
+	READ(5,*) N,M
+	READ(5,*)
+	READ(5,*) ((A(K,L), L=1,N), K=1,N)
+	READ(5,*)
+	READ(5,*) ((B(K,L), K=1,N), L=1,M)
+C	Save Matrices for later testing of results
+	DO 13 L=1,N
+		DO 11 K=1,N
+			AI(K,L)=A(K,L)
+11		CONTINUE
+		DO 12 K=1,M
+			X(L,K)=B(L,K)
+12		CONTINUE
+13	CONTINUE
+C	Invert Matrix
+	CALL GAUSSJ(AI,N,NP,X,M,NP)
+	WRITE(*,*) 'Inverse of Matrix A : '
+	DO 14 K=1,N
+		WRITE(*,'(1H,(6F12.6))') (AI(K,L), L=1,N)
+14	CONTINUE
+C	Test Results
+C	Check Inverse
+	WRITE(*,*) 'A times A-inverse (compare with unit matrix)'
+	DO 17 K=1,N
+		DO 16 L=1,N
+			U(K,L)=0.0
+			DO 15 J=1,N
+				U(K,L)=U(K,L)+A(K,J)*AI(J,L)
+15			CONTINUE
+16		CONTINUE
+		WRITE(*,'(1H,(6F12.6))') (U(K,L), L=1,N)
+17	CONTINUE
+C	Check Vector Solutions
+	WRITE(*,*) 'Check the following vectors for equality:'
+	WRITE(*,'(T12,A8,T23,A12)') 'Original','Matrix*Sol''n'
+	DO 21 L=1,M
+	        WRITE(*,'(1X,A,I2,A)') 'Vector ',L,':'
+		DO 19 K=1,N
+			T(K,L)=0.0
+			DO 18 J=1,N
+				T(K,L)=T(K,L)+A(K,J)*X(J,L)
+18			CONTINUE
+		WRITE(*,'(8X,2F12.6)') B(K,L),T(K,L)
+19		CONTINUE
+21	CONTINUE
+	WRITE(*,*) '***********************************'
+	WRITE(*,*) 'Press RETURN for next problem:'
+	READ(*,*)
+	GOTO 10
+99	CLOSE(5)
+	END	

@@ -1,0 +1,47 @@
+	PROGRAM D2R3
+C	Driver for routine LUBKSB
+	PARAMETER (NP=20)
+	DIMENSION A(NP,NP),B(NP,NP),INDX(NP)
+	DIMENSION C(NP,NP),X(NP)
+	CHARACTER TXT*3
+	OPEN(5,FILE='MATRX1.DAT',STATUS='OLD')
+	READ(5,*)
+10	READ(5,*)
+	READ(5,*) N,M
+	READ(5,*)
+	READ(5,*) ((A(K,L), L=1,N), K=1,N)
+	READ(5,*)
+	READ(5,*) ((B(K,L), K=1,N), L=1,M)
+C	Save matrix A for later testing
+	DO 12 L=1,N
+		DO 11 K=1,N
+			C(K,L)=A(K,L)
+11		CONTINUE
+12	CONTINUE
+C	Do LU decomposition
+	CALL LUDCMP(C,N,NP,INDX,P)
+C	Solve equations for each right-hand vector
+	DO 16 K=1,M
+		DO 13 L=1,N
+			X(L)=B(L,K)
+13		CONTINUE
+		CALL LUBKSB(C,N,NP,INDX,X)
+C	Test results with original matrix
+		WRITE(*,*) 'Right-hand side vector:'
+		WRITE(*,'(1X,6F12.6)') (B(L,K), L=1,N)
+		WRITE(*,*) 'Result of matrix applied to sol''n vector'
+		DO 15 L=1,N
+			B(L,K)=0.0
+			DO 14 J=1,N
+				B(L,K)=B(L,K)+A(L,J)*X(J)
+14			CONTINUE
+15		CONTINUE
+		WRITE(*,'(1X,6F12.6)') (B(L,K), L=1,N)
+		WRITE(*,*) '***********************************'
+16	CONTINUE
+	WRITE(*,*) 'Press RETURN for next problem:'
+	READ(*,*)
+	READ(5,'(A3)') TXT
+	IF (TXT.NE.'END') GOTO 10
+	CLOSE(5)
+	END

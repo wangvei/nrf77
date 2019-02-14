@@ -1,0 +1,39 @@
+	PROGRAM D12R2
+C	Driver for routine TWOFFT
+	PARAMETER(N=32,N2=2*N,PER=8.0,PI=3.14159)
+	DIMENSION DATA1(N),DATA2(N),FFT1(N2),FFT2(N2)
+	DO 11 I=1,N
+		X=2.0*PI*I/PER
+		DATA1(I)=NINT(COS(X))
+		DATA2(I)=NINT(SIN(X))
+11	CONTINUE
+	CALL TWOFFT(DATA1,DATA2,FFT1,FFT2,N)
+	WRITE(*,*) 'Fourier transform of first function:'
+	CALL PRNTFT(FFT1,N2)
+	WRITE(*,*) 'Fourier transform of second function:'
+	CALL PRNTFT(FFT2,N2)
+C	Invert transform
+	ISIGN=-1
+	CALL FOUR1(FFT1,N,ISIGN)
+	WRITE(*,*) 'Inverted transform = first function:'
+	CALL PRNTFT(FFT1,N2)
+	CALL FOUR1(FFT2,N,ISIGN)
+	WRITE(*,*) 'Inverted transform = second function:'
+	CALL PRNTFT(FFT2,N2)
+	END
+
+	SUBROUTINE PRNTFT(DATA,N2)
+	DIMENSION DATA(N2)
+	WRITE(*,'(1X,T7,A,T13,A,T24,A,T35,A,T47,A)') 
+     *		'n','Real(n)','Imag.(n)','Real(N-n)','Imag.(N-n)'
+	WRITE(*,'(1X,I6,4F12.6)') 0,DATA(1),DATA(2),DATA(1),DATA(2)
+	DO 11 I=3,(N2/2)+1,2
+		M=(I-1)/2
+		NN2=N2+2-I
+		WRITE(*,'(1X,I6,4F12.6)') M,DATA(I),DATA(I+1),
+     *			DATA(NN2),DATA(NN2+1)
+11	CONTINUE
+	WRITE(*,'(/1X,A)') ' press RETURN to continue ...'
+	READ(*,*)
+	RETURN
+	END

@@ -1,0 +1,60 @@
+	PROGRAM D2R8
+C	Driver for routine SVBKSB, which calls routine SVDCMP
+	PARAMETER(NP=20)
+	DIMENSION A(NP,NP),B(NP,NP),U(NP,NP),W(NP)
+	DIMENSION V(NP,NP),C(NP),X(NP)
+	CHARACTER DUMMY*3
+	OPEN(5,FILE='MATRX1.DAT',STATUS='OLD')
+10	READ(5,'(A)') DUMMY
+	IF (DUMMY.EQ.'END') GOTO 99
+	READ(5,*)
+	READ(5,*) N,M
+	READ(5,*)
+	READ(5,*) ((A(K,L), L=1,N), K=1,N)
+	READ(5,*)
+	READ(5,*) ((B(K,L), K=1,N), L=1,M)
+C	Copy A into U
+	DO 12 K=1,N
+		DO 11 L=1,N
+			U(K,L)=A(K,L)
+11		CONTINUE
+12	CONTINUE
+C	Decompose matrix A
+	CALL SVDCMP(U,N,N,NP,NP,W,V)
+C	Find maximum singular value
+	WMAX=0.0
+	DO 13 K=1,N
+		IF (W(K).GT.WMAX) WMAX=W(K)
+13	CONTINUE
+C	Define "small"
+	WMIN=WMAX*(1.0E-6)
+C	Zero the "small" singular values
+	DO 14 K=1,N
+		IF (W(K).LT.WMIN) W(K)=0.0
+14	CONTINUE
+C	Backsubstitute for each right-hand side vector
+	DO 18 L=1,M
+		WRITE(*,'(1X,A,I2)') 'Vector number ',L
+		DO 15 K=1,N
+			C(K)=B(K,L)
+15		CONTINUE
+		CALL SVBKSB(U,W,V,N,N,NP,NP,C,X)
+		WRITE(*,*) '    Solution vector is:'
+		WRITE(*,'(1X,6F12.6)') (X(K), K=1,N)
+		WRITE(*,*) '    Original right-hand side vector:'
+		WRITE(*,'(1X,6F12.6)') (C(K), K=1,N)
+		WRITE(*,*) '    Result of (matrix)*(sol''n vector):'
+		DO 17 K=1,N
+			C(K)=0.0
+			DO 16 J=1,N
+				C(K)=C(K)+A(K,J)*X(J)
+16			CONTINUE
+17		CONTINUE
+		WRITE(*,'(1X,6F12.6)') (C(K), K=1,N)
+18	CONTINUE
+	WRITE(*,*) '***********************************'
+	WRITE(*,*) 'Press RETURN for next problem'
+	READ(*,*)
+	GOTO 10
+99	CLOSE(5)
+	END

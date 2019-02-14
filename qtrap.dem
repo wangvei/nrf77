@@ -1,0 +1,22 @@
+	PROGRAM D4R2
+C	Driver for routine QTRAP
+	PARAMETER(PIO2=1.5707963)
+	EXTERNAL FUNC,FINT
+	A=0.0
+	B=PIO2
+	WRITE(*,'(1X,A)') 'Integral of FUNC computed with QTRAP'
+	WRITE(*,'(1X,A,F10.6)') 'Actual value of integral is',
+     *		FINT(B)-FINT(A)
+	CALL QTRAP(FUNC,A,B,S)
+	WRITE(*,'(1X,A,F10.6)') 'Result from routine QTRAP is',S
+	END
+
+	FUNCTION FUNC(X)
+	FUNC=(X**2)*(X**2-2.0)*SIN(X)
+	END
+
+	FUNCTION FINT(X)
+C	Integral of FUNC
+	FINT=4.0*X*((X**2)-7.0)*SIN(X)
+     *		-((X**4)-14.0*(X**2)+28.0)*COS(X)
+	END

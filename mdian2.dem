@@ -1,0 +1,14 @@
+	PROGRAM D13R3
+C	Driver for routine MDIAN2
+	PARAMETER(NPTS=50)
+	DIMENSION DATA(NPTS)
+	IDUM=-5
+	DO 11 I=1,NPTS
+		DATA(I)=GASDEV(IDUM)
+11	CONTINUE
+	CALL MDIAN2(DATA,NPTS,XMED)
+	WRITE(*,'(1X,A/)') 'Gaussian distrib., zero mean, unit variance'
+	WRITE(*,'(1X,A,F12.6)') 'Median according to MDIAN2 is',XMED
+	CALL MDIAN1(DATA,NPTS,XMED)
+	WRITE(*,'(1X,A,F12.6/)') 'Median according to MDIAN1 is',XMED
+	END

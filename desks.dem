@@ -1,0 +1,47 @@
+	PROGRAM D7R14
+C	Driver for routines KS and CYFUN in file DESKS.FOR
+	DIMENSION KEY(64),KN(48),IR(32),IOUT(32)
+	CHARACTER TEXT(64)*1
+C	First test routine KS
+	DO 11 I=1,64
+		KEY(I)=MOD(I,2)
+		IF (KEY(I).EQ.0) TEXT(I)='-'
+		IF (KEY(I).EQ.1) TEXT(I)='*'
+11	CONTINUE
+	WRITE(*,*) 'Legend:'
+	WRITE(*,'(1X,T12,A)') '-=0   *=1 '
+	WRITE(*,*) 'Master key:'
+	WRITE(*,'(1X,T12,56A1)') (TEXT(I),I=1,56)
+	WRITE(*,*) 'Sub-master keys:'
+	DO 13 I=1,16
+		CALL KS(KEY,I,KN)
+		DO 12 K=1,48
+			IF (KN(K).EQ.0) TEXT(K)='-'
+			IF (KN(K).EQ.1) TEXT(K)='*'
+12		CONTINUE
+		WRITE(*,'(1X,I6,T12,48A1)') I,(TEXT(J),J=1,48)
+13	CONTINUE
+	WRITE(*,*) 'press RETURN to continue...'
+	READ(*,*)
+C	Now test routine CYFUN
+	DO 14 I=1,32
+		IR(I)=MOD(I,3)
+		IR(I)=MOD(IR(I),2)
+		IF (IR(I).EQ.0) TEXT(I)='-'
+		IF (IR(I).EQ.1) TEXT(I)='*'
+14	CONTINUE
+	WRITE(*,*) 'Legend:'
+	WRITE(*,'(1X,T12,A)') '-=0   *=1 '
+	WRITE(*,*) 'Input to cipher function:'
+	WRITE(*,'(1X,T12,32A1)') (TEXT(I),I=1,32)
+	WRITE(*,*) 'Ciphered output:'
+	DO 16 I=1,16
+		CALL KS(KEY,I,KN)
+		CALL CYFUN(IR,KN,IOUT)
+		DO 15 K=1,32
+			IF (IOUT(K).EQ.0) TEXT(K)='-'
+			IF (IOUT(K).EQ.1) TEXT(K)='*'
+15		CONTINUE
+		WRITE(*,'(1X,I6,T12,32A1)') I,(TEXT(J),J=1,32)
+16	CONTINUE
+	END

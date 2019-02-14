@@ -1,0 +1,25 @@
+	PROGRAM D3R5
+C	Driver for routine LOCATE
+	PARAMETER(N=100)
+	DIMENSION XX(N)
+C	Create array to be searched
+	DO 11 I=1,N
+		XX(I)=EXP(I/20.0)-74.0
+11	CONTINUE
+	WRITE(*,*) 'Result of:   j=0 indicates x too small'
+	WRITE(*,*) '           j=100 indicates x too large'
+	WRITE(*,'(T5,A7,T17,A1,T24,A5,T34,A7)') 'locate ','j'
+     *  ,'xx(j)','xx(j+1)'
+C	Do test
+	DO 12 I=1,19
+		X=-100.0+200.0*I/20.0
+		CALL LOCATE(XX,N,X,J)
+		IF (J.EQ.0) THEN
+			WRITE(*,'(1X,F10.4,I6,A12,F12.6)') X,J,'lower lim',XX(J+1)
+		ELSE IF (J.EQ.N) THEN
+			WRITE(*,'(1X,F10.4,I6,F12.6,A12)') X,J,XX(J),'upper lim'
+		ELSE
+			WRITE(*,'(1X,F10.4,I6,2F12.6)') X,J,XX(J),XX(J+1)
+		ENDIF
+12	CONTINUE
+	END

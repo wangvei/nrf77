@@ -1,0 +1,21 @@
+	PROGRAM D3R3
+C	Driver for routine SPLINE
+	PARAMETER(N=20,PI=3.141593)
+	DIMENSION X(N),Y(N),Y2(N)
+	WRITE(*,*) 'Second-derivatives for sin(x) from 0 to PI'
+C	Generate array for interpolation
+	DO 11 I=1,20
+		X(I)=I*PI/N
+		Y(I)=SIN(X(I))
+11	CONTINUE
+C	Calculate 2nd derivative with SPLINE
+	YP1=COS(X(1))
+	YPN=COS(X(N))
+	CALL SPLINE(X,Y,N,YP1,YPN,Y2)
+C	Test result
+	WRITE(*,'(T19,A,T35,A)') 'spline','actual'
+	WRITE(*,'(T6,A,T17,A,T33,A)') 'angle','2nd deriv','2nd deriv'
+	DO 12 I=1,N
+		WRITE(*,'(1X,F8.2,2F16.6)') X(I),Y2(I),-SIN(X(I))
+12	CONTINUE
+	END

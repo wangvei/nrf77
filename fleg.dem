@@ -1,0 +1,16 @@
+	PROGRAM D14R7
+C	Driver for routine FLEG
+	PARAMETER(NVAL=5,DX=0.2,NPOLY=5)
+	DIMENSION AFUNC(NPOLY)
+	WRITE(*,'(/1X,T25,A)') 'Legendre Polynomials'
+	WRITE(*,'(/1X,T8,A,T18,A,T28,A,T38,A,T48,A)')
+     *			'N=1','N=2','N=3','N=4','N=5'
+	DO 11 I=1,NVAL
+		X=I*DX
+		CALL FLEG(X,AFUNC,NPOLY)
+		WRITE(*,'(1X,A,F6.2)') 'X =',X
+		WRITE(*,'(1X,5F10.4,A)') (AFUNC(J),J=1,NPOLY),'  routine FLEG'
+		WRITE(*,'(1X,5F10.4,A/)') (PLGNDR(J-1,0,X),J=1,NPOLY),
+     *			'  routine PLGNDR'
+11	CONTINUE
+	END

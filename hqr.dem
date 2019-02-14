@@ -1,0 +1,20 @@
+	PROGRAM D11R7
+C	Driver for routine HQR
+	PARAMETER(NP=5)
+	DIMENSION A(NP,NP),WR(NP),WI(NP)
+	DATA A/1.0,-2.0,3.0,-4.0,-5.0,2.0,3.0,4.0,5.0,6.0,
+     *		0.0,0.0,50.0,-60.0,-70.0,0.0,0.0,0.0,7.0,8.0,
+     *		0.0,0.0,0.0,0.0,-9.0/
+	WRITE(*,'(/1X,A)') 'Matrix:'
+	DO 11 I=1,NP
+		WRITE(*,'(1X,5F12.2)') (A(I,J),J=1,NP)
+11	CONTINUE
+	CALL BALANC(A,NP,NP)
+	CALL ELMHES(A,NP,NP)
+	CALL HQR(A,NP,NP,WR,WI)
+	WRITE(*,'(/1X,A)') 'Eigenvalues:'
+	WRITE(*,'(/1X,T9,A,T24,A/)') 'Real','Imag.'
+	DO 12 I=1,NP
+		WRITE(*,'(1X,2E15.6)') WR(I),WI(I)
+12	CONTINUE			
+	END

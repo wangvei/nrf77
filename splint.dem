@@ -1,0 +1,44 @@
+	PROGRAM D3R4
+C	Driver for routine SPLINT, which calls SPLINE
+	PARAMETER(NP=10,PI=3.141593)
+	DIMENSION XA(NP),YA(NP),Y2(NP)
+	DO 14 NFUNC=1,2
+		IF (NFUNC.EQ.1) THEN
+			WRITE(*,*) 'Sine function from 0 to pi'
+			DO 11 I=1,NP
+				XA(I)=I*PI/NP
+				YA(I)=SIN(XA(I))
+11			CONTINUE
+			YP1=COS(XA(1))
+			YPN=COS(XA(NP))
+		ELSE IF (NFUNC.EQ.2) THEN
+			WRITE(*,*) 'Exponential function from 0 to 1'
+			DO 12 I=1,NP
+				XA(I)=1.0*I/NP
+				YA(I)=EXP(XA(I))
+12			CONTINUE
+			YP1=EXP(XA(1))
+			YPN=EXP(XA(NP))
+		ELSE
+			STOP
+		ENDIF
+C	Call SPLINE to get second derivatives
+		CALL SPLINE(XA,YA,NP,YP1,YP2,Y2)
+C	Call SPLINT for interpolations
+		WRITE(*,'(1X,T10,A1,T20,A4,T28,A13)') 'x','f(x)','interpolation'
+		DO 13 I=1,10
+			IF (NFUNC.EQ.1) THEN
+				X=(-0.05+I/10.0)*PI
+				F=SIN(X)
+			ELSE IF (NFUNC.EQ.2) THEN
+				X=-0.05+I/10.0
+				F=EXP(X)
+			ENDIF
+			CALL SPLINT(XA,YA,Y2,NP,X,Y)
+			WRITE(*,'(1X,3F12.6)') X,F,Y
+13		CONTINUE
+		WRITE(*,*) '***********************************'
+		WRITE(*,*) 'Press RETURN'
+		READ(*,*)
+14	CONTINUE
+	END

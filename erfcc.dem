@@ -1,0 +1,17 @@
+	PROGRAM D6R12
+C	Driver for routine ERFCC
+	CHARACTER TEXT*14
+	OPEN(5,FILE='FNCVAL.DAT',STATUS='OLD')
+10	READ(5,'(A)') TEXT
+	IF (TEXT.NE.'Error Function') GOTO 10
+	READ(5,*) NVAL
+	WRITE(*,*) 'Complementary error function'
+	WRITE(*,'(1X,T5,A1,T12,A6,T23,A8)')
+     *		'X','Actual','ERFCC(X)'
+	DO 11 I=1,NVAL
+		READ(5,*) X,VALUE
+		VALUE=1.0-VALUE
+		WRITE(*,'(F6.2,2F12.7)') X,VALUE,ERFCC(X)
+11	CONTINUE
+	CLOSE(5)
+	END

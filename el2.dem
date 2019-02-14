@@ -1,0 +1,27 @@
+	PROGRAM D6R28
+C	Driver for routine EL2
+	COMMON AKC,A,B
+	EXTERNAL FUNC
+	WRITE(*,*) 'General Elliptic Integral of Second Kind'
+	WRITE(*,'(1X,T8,A,T17,A,T28,A,T38,A,T47,A,T54,A)')
+     *		'x','kc','a','b','EL2','Integral'
+	IDUM=-55
+	AGO=0.0
+	DO 11 I=1,20
+		AKC=5.0*RAN3(IDUM)	
+		A=10.0*RAN3(IDUM)
+		B=10.0*RAN3(IDUM)
+		X=10.0*RAN3(IDUM)	
+		ASTOP=ATAN(X)
+		CALL QSIMP(FUNC,AGO,ASTOP,S)
+		WRITE(*,'(1X,6F10.6)')
+     *			X,AKC,A,B,EL2(X,AKC,A,B),S
+11	CONTINUE
+	END
+
+	FUNCTION FUNC(PHI)
+	COMMON AKC,A,B
+	TN=TAN(PHI)
+	TSQ=TN*TN
+	FUNC=(A+B*TSQ)/SQRT((1.0+TSQ)*(1.0+AKC*AKC*TSQ))
+	END

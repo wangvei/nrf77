@@ -1,0 +1,88 @@
+	PROGRAM D11R1
+C	Driver for routine JACOBI
+	PARAMETER(NP=10,NMAT=3)
+	DIMENSION D(NP),V(NP,NP),R(NP)
+	DIMENSION A(3,3),B(5,5),C(10,10),E(NP,NP),NUM(3)
+	DATA NUM/3,5,10/
+	DATA A/1.0,2.0,3.0,2.0,2.0,3.0,3.0,3.0,3.0/
+	DATA B/-2.0,-1.0,0.0,1.0,2.0,-1.0,-1.0,0.0,1.0,2.0,
+     *		0.0,0.0,0.0,1.0,2.0,1.0,1.0,1.0,1.0,2.0,
+     *		2.0,2.0,2.0,2.0,2.0/
+	DATA C/5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,-4.0,
+     *		4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,
+     *		3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,
+     *		2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,
+     *		1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,
+     *		0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,
+     *		-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,
+     *		-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,
+     *		-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,
+     *		-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0/
+	DO 24 I=1,NMAT
+		IF (I.EQ.1) THEN
+			DO 12 II=1,3
+				DO 11 JJ=1,3
+					E(II,JJ)=A(II,JJ)
+11				CONTINUE
+12			CONTINUE
+			CALL JACOBI(E,3,NP,D,V,NROT)
+		ELSE IF (I.EQ.2) THEN
+			DO 14 II=1,5
+				DO 13 JJ=1,5
+					E(II,JJ)=B(II,JJ)
+13				CONTINUE
+14			CONTINUE
+			CALL JACOBI(E,5,NP,D,V,NROT)
+		ELSE IF (I.EQ.3) THEN
+			DO 16 II=1,10
+				DO 15 JJ=1,10
+					E(II,JJ)=C(II,JJ)
+15				CONTINUE
+16			CONTINUE
+			CALL JACOBI(E,10,NP,D,V,NROT)
+		ENDIF
+		WRITE(*,'(/1X,A,I2)') 'Matrix Number',I
+		WRITE(*,'(1X,A,I3)') 'Number of JACOBI rotations:',NROT
+		WRITE(*,'(/1X,A)') 'Eigenvalues:'
+		DO 17 J=1,NUM(I)
+			WRITE(*,'(1X,5F12.6)') D(J)
+17		CONTINUE
+		WRITE(*,'(/1X,A)') 'Eigenvectors:'
+		DO 18 J=1,NUM(I)
+			WRITE(*,'(1X,T5,A,I3)') 'Number',J
+			WRITE(*,'(1X,5F12.6)') (V(K,J),K=1,NUM(I))
+18		CONTINUE
+C	Eigenvector test
+		WRITE(*,'(/1X,A)') 'Eigenvector Test'
+		DO 23 J=1,NUM(I)
+			DO 21 L=1,NUM(I)
+				R(L)=0.0
+				DO 19 K=1,NUM(I)
+					IF (K.GT.L) THEN
+						KK=L
+						LL=K
+					ELSE
+						KK=K
+						LL=L
+					ENDIF
+					IF (I.EQ.1) THEN
+						R(L)=R(L)+A(LL,KK)*V(K,J)
+					ELSE IF (I.EQ.2) THEN
+						R(L)=R(L)+B(LL,KK)*V(K,J)
+					ELSE IF (I.EQ.3) THEN
+						R(L)=R(L)+C(LL,KK)*V(K,J)
+					ENDIF
+19				CONTINUE
+21			CONTINUE
+			WRITE(*,'(/1X,A,I3)') 'Vector Number',J
+			WRITE(*,'(/1X,T7,A,T18,A,T31,A)')
+     *				'Vector','Mtrx*Vec.','Ratio'
+			DO 22 L=1,NUM(I)
+				RATIO=R(L)/V(L,J)
+				WRITE(*,'(1X,3F12.6)') V(L,J),R(L),RATIO
+22			CONTINUE
+23		CONTINUE
+		WRITE(*,*) 'press RETURN to continue...'
+		READ(*,*)
+24	CONTINUE
+	END

@@ -1,0 +1,30 @@
+	PROGRAM D9R11
+C	Driver for routine ZROOTS
+	PARAMETER(M=4,M1=M+1)
+	COMPLEX A(M1),X,ROOTS(M)
+	LOGICAL POLISH
+	DATA A/(0.0,2.0),(0.0,0.0),(-1.0,-2.0),(0.0,0.0),(1.0,0.0)/
+	WRITE(*,'(/1X,A)') 'Roots of the polynomial x^4-(1+2i)*x^2+2i'
+	POLISH=.FALSE.
+	CALL ZROOTS(A,M,ROOTS,POLISH)
+	WRITE(*,'(/1X,A)') 'Unpolished roots:'
+	WRITE(*,'(1X,T10,A,T25,A,T37,A)') 'Root #','Real','Imag.'
+	DO 11 I=1,M
+		WRITE(*,'(1X,I11,5X,2F12.6)') I,ROOTS(I)
+11	CONTINUE
+	WRITE(*,'(/1X,A)') 'Corrupted roots:'
+	DO 12 I=1,M
+		ROOTS(I)=ROOTS(I)*(1.0+0.01*I)
+12	CONTINUE
+	WRITE(*,'(1X,T10,A,T25,A,T37,A)') 'Root #','Real','Imag.'
+	DO 13 I=1,M
+		WRITE(*,'(1X,I11,5X,2F12.6)') I,ROOTS(I)
+13	CONTINUE
+	POLISH=.TRUE.
+	CALL ZROOTS(A,M,ROOTS,POLISH)
+	WRITE(*,'(/1X,A)') 'Polished roots:'
+	WRITE(*,'(1X,T10,A,T25,A,T37,A)') 'Root #','Real','Imag.'
+	DO 14 I=1,M
+		WRITE(*,'(1X,I11,5X,2F12.6)') I,ROOTS(I)
+14	CONTINUE
+	END

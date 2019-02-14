@@ -1,0 +1,18 @@
+	PROGRAM D9R2
+C	Driver for routine ZBRAC
+	LOGICAL SUCCES
+	EXTERNAL BESSJ0
+	WRITE(*,'(/1X,T4,A,T29,A/))') 'Bracketing values:',
+     *		'Function values:'
+	WRITE(*,'(1X,T6,A,T16,A,T29,A,T41,A/))') 'X1','X2',
+     *		'BESSJ0(X1)','BESSJ0(X2)'
+	DO 11 I=1,10
+		X1=I
+		X2=X1+1.0
+		CALL ZBRAC(BESSJ0,X1,X2,SUCCES)
+		IF (SUCCES) THEN
+			WRITE(*,'(1X,F7.2,F10.2,7X,2F12.6))') X1,X2,
+     *				BESSJ0(X1),BESSJ0(X2)
+		ENDIF
+11	CONTINUE
+	END

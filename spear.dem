@@ -1,0 +1,41 @@
+	PROGRAM D13R16
+C	Driver for routine SPEAR
+	PARAMETER(NDAT=20,NMON=12)
+	DIMENSION DATA1(NDAT),DATA2(NDAT),RAYS(NDAT,NMON)
+	DIMENSION WKSP1(NDAT),WKSP2(NDAT),AVE(NDAT),ZLAT(NDAT)
+	CHARACTER CITY(NDAT)*15,MON(NMON)*4,TEXT*64
+	OPEN(5,FILE='TABLE2.DAT',STATUS='OLD')
+	READ(5,*)
+	READ(5,'(A)') TEXT
+	READ(5,'(15X,12A4/)') (MON(I),I=1,12)
+	DO 11 I=1,NDAT
+		READ(5,'(A15,12F4.0,F6.0,F6.1)')
+     *			CITY(I),(RAYS(I,J),J=1,12),AVE(I),ZLAT(I)
+11	CONTINUE
+	CLOSE(5)
+	WRITE(*,*) TEXT
+	WRITE(*,'(1X,15X,12A4)') (MON(I),I=1,12)
+	DO 12 I=1,NDAT
+		WRITE(*,'(1X,A,12I4,I6,F6.1)') CITY(I),
+     *			(NINT(RAYS(I,J)),J=1,12)
+12	CONTINUE
+C	Check temperature correlations between different months
+	WRITE(*,'(/1X,A)') 
+     *		'Are sunny summer places also sunny winter places?'
+	WRITE(*,'(1X,2A)') 'Check correlation of sampled U.S. solar ',
+     *  'radiation (july with other months)'
+	WRITE(*,'(/1X,A,T16,A,T23,A,T37,A,T49,A,T63,A/)') 
+     *		'Month','D','St. Dev.','PROBD',
+     *		'Spearman R','PROBRS'
+	DO 13 I=1,NDAT
+		DATA1(I)=RAYS(I,1)
+13	CONTINUE
+	DO 15 J=1,12
+		DO 14 I=1,NDAT
+			DATA2(I)=RAYS(I,J)
+14		CONTINUE
+		CALL SPEAR(DATA1,DATA2,NDAT,WKSP1,WKSP2,D,ZD,PROBD,RS,PROBRS)
+		WRITE(*,'(1X,A,F13.2,2F12.6,3X,2F12.6)') 
+     *			MON(J),D,ZD,PROBD,RS,PROBRS
+15	CONTINUE
+	END

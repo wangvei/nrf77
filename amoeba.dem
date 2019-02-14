@@ -1,0 +1,29 @@
+	PROGRAM D10R5
+C	Driver for routine AMOEBA
+	EXTERNAL FAMOEB
+	PARAMETER(NP=3,MP=4,FTOL=1.0E-6)
+	DIMENSION P(MP,NP),X(NP),Y(MP)
+	DATA P/0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0/
+	NDIM=NP
+	DO 12 I=1,MP
+		DO 11 J=1,NP
+			X(J)=P(I,J)
+11		CONTINUE
+		Y(I)=FAMOEB(X)
+12	CONTINUE
+	CALL AMOEBA(P,Y,MP,NP,NDIM,FTOL,FAMOEB,ITER)
+	WRITE(*,'(/1X,A,I3)') 'Iterations: ',ITER
+	WRITE(*,'(/1X,A)') 'Vertices of final 3-D simplex and'
+	WRITE(*,'(1X,A)') 'function values at the vertices:'
+	WRITE(*,'(/3X,A,T11,A,T23,A,T35,A,T45,A/)') 'I',
+     *		'X(I)','Y(I)','Z(I)','FUNCTION'
+	DO 13 I=1,MP
+		WRITE(*,'(1X,I3,4F12.6)') I,(P(I,J),J=1,NP),Y(I)
+13	CONTINUE
+	WRITE(*,'(/1X,A)') 'True minimum is at (0.5,0.6,0.7)'
+	END
+
+	FUNCTION FAMOEB(X)
+	DIMENSION X(3)
+	FAMOEB=0.6-BESSJ0((X(1)-0.5)**2+(X(2)-0.6)**2+(X(3)-0.7)**2)
+	END

@@ -1,0 +1,24 @@
+	PROGRAM D5R1
+C	Driver for routine EULSUM
+	PARAMETER (NVAL=40)
+	DIMENSION WKSP(NVAL)
+C	Evaluate ln(1+x)=x-x^2/2+x^3/3-x^4/4...  for -1<x<1
+10	WRITE(*,*) 'How many terms in polynomial?'	
+	WRITE(*,'(1X,A,I2,A)') 'Enter n between 1 and ',NVAL,
+     *				'. Enter n=0 to end.'
+	READ(*,*) MVAL
+	IF ((MVAL.LE.0).OR.(MVAL.GT.NVAL)) STOP
+	WRITE(*,'(1X,T9,A1,T18,A6,T28,A10)') 'X','Actual','Polynomial'
+	DO 12 I=-8,8,1
+		X=I/10.0
+		SUM=0.0
+		XPOWER=-1
+		DO 11 J=1,MVAL
+			XPOWER=-X*XPOWER
+			TERM=XPOWER/J
+			CALL EULSUM(SUM,TERM,J,WKSP)
+11		CONTINUE
+		WRITE(*,'(3F12.6)') X,LOG(1.0+X),SUM
+12	CONTINUE
+	GOTO 10
+	END

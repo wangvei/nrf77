@@ -1,0 +1,31 @@
+	PROGRAM D5R9
+C	Driver for routine PCSHFT
+	PARAMETER(NVAL=40, PIO2=1.5707963)
+	EXTERNAL FUNC
+	DIMENSION C(NVAL),D(NVAL)
+	A=-PIO2
+	B=PIO2
+	CALL CHEBFT(A,B,C,NVAL,FUNC)
+10	WRITE(*,*) 'How many terms in Chebyshev evaluation?'
+	WRITE(*,'(1X,A,I2,A)') 'Enter n between 6 and ',NVAL,
+     *				'. Enter n=0 to end.'
+	READ(*,*) MVAL
+	IF ((MVAL.LE.0).OR.(MVAL.GT.NVAL)) GOTO 20
+	CALL CHEBPC(C,D,MVAL)
+	CALL PCSHFT(A,B,D,MVAL)
+C	Test shifted polynomial
+	WRITE(*,'(1X,T10,A,T19,A,T29,A)') 'X','Actual','Polynomial'
+	DO 12 I=-8,8,1
+		X=I*PIO2/10.0
+		POLY=D(MVAL)
+		DO 11 J=MVAL-1,1,-1
+			POLY=POLY*X+D(J)
+11		CONTINUE
+		WRITE(*,'(1X,3F12.6)') X,FUNC(X),POLY
+12	CONTINUE
+	GOTO 10
+20	END
+
+	FUNCTION FUNC(X)
+	FUNC=(X**2)*(X**2-2.0)*SIN(X)
+	END

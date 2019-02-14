@@ -1,0 +1,23 @@
+	PROGRAM D4R5
+C	Driver for routine MIDPNT
+	PARAMETER(NMAX=10)
+	EXTERNAL FUNC2,FINT2
+	A=0.0
+	B=1.0
+	WRITE(*,*) 'Integral of FUNC2 computed with MIDPNT'
+	WRITE(*,*) 'Actual value of integral is',FINT2(B)-FINT2(A)
+	WRITE(*,'(1X,T7,A,T20,A)') 'n','Approx. Integral'
+	DO 11 I=1,NMAX
+		CALL MIDPNT(FUNC2,A,B,S,I)
+		WRITE(*,'(1X,I6,F24.6)') I,S
+11	CONTINUE
+	END
+
+	FUNCTION FUNC2(X)
+	FUNC2=1.0/SQRT(X)
+	END
+
+	FUNCTION FINT2(X)
+C	Integral of FUNC2
+	FINT2=2.0*SQRT(X)
+	END

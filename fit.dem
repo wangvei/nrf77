@@ -1,0 +1,25 @@
+	PROGRAM D14R1
+C	Driver for routine FIT
+	PARAMETER(NPT=100,SPREAD=0.5)
+	DIMENSION X(NPT),Y(NPT),SIG(NPT)
+	IDUM=-117
+	DO 11 I=1,NPT
+		X(I)=0.1*I
+		Y(I)=-2.0*X(I)+1.0+SPREAD*GASDEV(IDUM)
+		SIG(I)=SPREAD
+11	CONTINUE
+	DO 12 MWT=0,1
+		CALL FIT(X,Y,NPT,SIG,MWT,A,B,SIGA,SIGB,CHI2,Q)
+		IF (MWT.EQ.0) THEN
+			WRITE(*,'(//1X,A)') 'Ignoring standard deviation'
+		ELSE
+			WRITE(*,'(//1X,A)') 'Including standard deviation'
+		ENDIF
+		WRITE(*,'(1X,T5,A,F9.6,T24,A,F9.6)') 'A = ',A,'Uncertainty: ',
+     *			SIGA
+		WRITE(*,'(1X,T5,A,F9.6,T24,A,F9.6)') 'B = ',B,'Uncertainty: ',
+     *			SIGB
+		WRITE(*,'(1X,T5,A,4X,F10.6)') 'Chi-squared: ',CHI2
+		WRITE(*,'(1X,T5,A,F10.6)') 'Goodness-of-fit: ',Q
+12	CONTINUE
+	END

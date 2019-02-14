@@ -1,0 +1,76 @@
+	PROGRAM D2R2
+C	Driver for routine LUDCMP
+	PARAMETER(NP=20)
+	DIMENSION A(NP,NP),XL(NP,NP),XU(NP,NP)
+	DIMENSION INDX(NP),JNDX(NP),X(NP,NP)
+	CHARACTER TXT*3
+	OPEN (5,FILE='MATRX1.DAT',STATUS='OLD')
+	READ(5,*)
+10	READ(5,*)
+	READ(5,*) N,M
+	READ(5,*)
+	READ(5,*) ((A(K,L), L=1,N), K=1,N)
+	READ(5,*)
+	READ(5,*) ((X(K,L), K=1,N), L=1,M)
+C	Print out A-matrix for comparison with product of lower
+C	and upper decomposition matrices.
+	WRITE(*,*) 'Original matrix:'
+	DO 11 K=1,N
+		WRITE(*,'(1X,6F12.6)') (A(K,L), L=1,N)
+11	CONTINUE
+C	Perform the decomposition
+	CALL LUDCMP(A,N,NP,INDX,D)
+C	Compose separately the lower and upper matrices
+	DO 13 K=1,N
+		DO 12 L=1,N
+			IF (L.GT.K) THEN
+				XU(K,L)=A(K,L)
+				XL(K,L)=0.0
+			ELSE IF (L.LT.K) THEN
+				XU(K,L)=0.0
+				XL(K,L)=A(K,L)
+			ELSE
+				XU(K,L)=A(K,L)
+				XL(K,L)=1.0
+			ENDIF
+12		CONTINUE
+13	CONTINUE
+C	Compute product of lower and upper matrices for
+C	comparison with original matrix.
+	DO 16 K=1,N
+		JNDX(K)=K
+		DO 15 L=1,N
+			X(K,L)=0.0
+			DO 14 J=1,N
+				X(K,L)=X(K,L)+XL(K,J)*XU(J,L)
+14			CONTINUE
+15		CONTINUE
+16	CONTINUE
+	WRITE(*,*) 'Product of lower and upper matrices (unscrambled):'
+	DO 17 K=1,N
+		DUM=JNDX(INDX(K))
+		JNDX(INDX(K))=JNDX(K)
+		JNDX(K)=DUM
+17	CONTINUE
+	DO 19 K=1,N
+		DO 18 J=1,N
+			IF (JNDX(J).EQ.K) THEN
+				WRITE(*,'(1X,6F12.6)') (X(J,L), L=1,N)
+			ENDIF
+18		CONTINUE
+19	CONTINUE
+	WRITE(*,*) 'Lower matrix of the decomposition:'
+	DO 21 K=1,N
+		WRITE(*,'(1X,6F12.6)') (XL(K,L), L=1,N)
+21	CONTINUE
+	WRITE(*,*) 'Upper matrix of the decomposition:'
+	DO 22 K=1,N
+		WRITE(*,'(1X,6F12.6)') (XU(K,L), L=1,N)
+22	CONTINUE
+	WRITE(*,*) '***********************************'
+	WRITE(*,*) 'Press RETURN for next problem:'
+	READ(*,*)
+	READ(5,'(A3)') TXT
+	IF (TXT.NE.'END') GOTO 10
+	CLOSE(5)
+	END

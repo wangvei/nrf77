@@ -1,0 +1,23 @@
+	PROGRAM D13R1
+C	Driver for routine MOMENT
+	PARAMETER(PI=3.14159265,NPTS=10000,NBIN=100,NDAT=NPTS+NBIN)
+	DIMENSION DATA(NDAT)
+	I=1
+	DO 12 J=1,NBIN
+		X=PI*J/NBIN
+		NLIM=NINT(SIN(X)*PI/2.0*NPTS/NBIN)
+		DO 11 K=1,NLIM
+			DATA(I)=X
+			I=I+1
+11		CONTINUE
+12	CONTINUE
+	WRITE(*,'(1X,A/)') 'Moments of a sinusoidal distribution'
+	CALL MOMENT(DATA,NPTS,AVE,ADEV,SDEV,VAR,SKEW,CURT)
+	WRITE(*,'(1X,T29,A,T42,A/)') 'Calculated','Expected'
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Mean :',AVE,PI/2.0
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Average Deviation :',ADEV,0.570796
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Standard Deviation :',SDEV,0.683667
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Variance :',VAR,0.467401
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Skewness :',SKEW,0.0
+	WRITE(*,'(1X,A,T25,2F12.4)') 'Kurtosis :',CURT,-0.806249
+	END

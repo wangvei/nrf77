@@ -1,0 +1,16 @@
+	PROGRAM D6R4
+C	Driver for routine FACTLN
+	CHARACTER TEXT*11
+	OPEN(5,FILE='FNCVAL.DAT',STATUS='OLD')
+10	READ(5,'(A)') TEXT
+	IF (TEXT.NE.'N-factorial') GOTO 10
+	READ(5,*) NVAL
+	WRITE(*,*) 'Log of N-factorial'
+	WRITE(*,'(1X,T6,A1,T18,A6,T34,A9)')
+     *		'N','Actual','FACTLN(N)'
+	DO 11 I=1,NVAL
+		READ(5,*) N,VALUE
+		WRITE(*,'(I6,2F18.6)') N,LOG(VALUE),FACTLN(N)
+11	CONTINUE
+	CLOSE(5)
+	END

@@ -1,0 +1,42 @@
+	PROGRAM D11R3
+C	Driver for routine TRED2
+	PARAMETER(NP=10)
+	DIMENSION A(NP,NP),C(NP,NP),D(NP),E(NP),F(NP,NP)
+	DATA C/5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,-4.0,
+     *		4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,
+     *		3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,
+     *		2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,
+     *		1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,
+     *		0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,
+     *		-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,
+     *		-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,
+     *		-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,
+     *		-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0/
+	DO 12 I=1,NP
+		DO 11 J=1,NP
+			A(I,J)=C(I,J)
+11		CONTINUE
+12	CONTINUE
+	CALL TRED2(A,NP,NP,D,E)
+	WRITE(*,'(/1X,A)') 'Diagonal elements'
+	WRITE(*,'(1X,5F12.6)') (D(I),I=1,NP)
+	WRITE(*,'(/1X,A)') 'Off-diagonal elements'
+	WRITE(*,'(1X,5F12.6)') (E(I),I=2,NP)
+C	Check transformation matrix
+	DO 16 J=1,NP
+		DO 15 K=1,NP
+		F(J,K)=0.0
+			DO 14 L=1,NP
+				DO 13 M=1,NP
+					F(J,K)=F(J,K)
+     *					+A(L,J)*C(L,M)*A(M,K)
+13				CONTINUE
+14			CONTINUE
+15		CONTINUE
+16	CONTINUE
+C	How does it look?
+	WRITE(*,'(/1X,A)') 'Tridiagonal matrix'
+	DO 17 I=1,NP
+		WRITE(*,'(1X,10F7.2)') (F(I,J),J=1,NP)
+17	CONTINUE
+	END

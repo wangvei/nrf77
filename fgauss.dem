@@ -1,0 +1,23 @@
+	PROGRAM D14R9
+C	Driver for routine FGAUSS
+	PARAMETER(NPT=3,NLIN=2,NA=3*NLIN)
+	DIMENSION A(NA),DYDA(NA),DF(NA)
+	DATA A/3.0,0.2,0.5,1.0,0.7,0.3/
+	WRITE(*,'(/1X,T6,A,T14,A,T19,A,T27,A,T35,A,T43,A,T51,A,T59,A)')
+     *		'X','Y','DYDA1','DYDA2','DYDA3','DYDA4','DYDA5','DYDA6'
+	DO 11 I=1,NPT
+		X=0.3*I
+		CALL FGAUSS(X,A,Y,DYDA,NA)
+		E1=EXP(-((X-A(2))/A(3))**2)
+		E2=EXP(-((X-A(5))/A(6))**2)
+		F=A(1)*E1+A(4)*E2
+		DF(1)=E1
+		DF(4)=E2
+		DF(2)=A(1)*E1*2.0*(X-A(2))/(A(3)**2)
+		DF(5)=A(4)*E2*2.0*(X-A(5))/(A(6)**2)
+		DF(3)=A(1)*E1*2.0*((X-A(2))**2)/(A(3)**3)
+		DF(6)=A(4)*E2*2.0*((X-A(5))**2)/(A(6)**3)
+		WRITE(*,'(1X,A/,8F8.4)') 'from FGAUSS',X,Y,(DYDA(J),J=1,6)
+		WRITE(*,'(1X,A/,8F8.4/)') 'independent calc.',X,F,(DF(J),J=1,6)
+11	CONTINUE
+	END

@@ -1,0 +1,34 @@
+	PROGRAM D15R1
+C	Driver for routine RK4
+	EXTERNAL DERIVS
+	PARAMETER(N=4)
+	DIMENSION Y(N),DYDX(N),YOUT(N)
+	X=1.0
+	Y(1)=BESSJ0(X)
+	Y(2)=BESSJ1(X)
+	Y(3)=BESSJ(2,X)
+	Y(4)=BESSJ(3,X)
+	DYDX(1)=-Y(2)
+	DYDX(2)=Y(1)-Y(2)
+	DYDX(3)=Y(2)-2.0*Y(3)
+	DYDX(4)=Y(3)-3.0*Y(4)
+	WRITE(*,'(/1X,A,T19,A,T31,A,T43,A,T55,A)') 
+     *		'Bessel Function:','J0','J1','J3','J4'
+	DO 11 I=1,5
+		H=0.2*I
+		CALL RK4(Y,DYDX,N,X,H,YOUT,DERIVS)
+		WRITE(*,'(/1X,A,F6.2)') 'For a step size of:',H
+		WRITE(*,'(1X,A10,4F12.6)') 'RK4:',(YOUT(J),J=1,4)
+		WRITE(*,'(1X,A10,4F12.6)') 'Actual:',BESSJ0(X+H),
+     *				BESSJ1(X+H),BESSJ(2,X+H),BESSJ(3,X+H)
+11	CONTINUE
+	END
+
+	SUBROUTINE DERIVS(X,Y,DYDX)
+	DIMENSION Y(1),DYDX(1)
+	DYDX(1)=-Y(2)
+	DYDX(2)=Y(1)-(1.0/X)*Y(2)
+	DYDX(3)=Y(2)-(2.0/X)*Y(3)
+	DYDX(4)=Y(3)-(3.0/X)*Y(4)
+	RETURN
+	END

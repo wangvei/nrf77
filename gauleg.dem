@@ -1,0 +1,22 @@
+	PROGRAM D4R9
+C	Driver for routine GAULEG
+	PARAMETER(NPOINT=10,X1=0.0,X2=1.0,X3=10.0)
+	DIMENSION X(NPOINT),W(NPOINT)
+	CALL GAULEG(X1,X2,X,W,NPOINT)
+	WRITE(*,'(/1X,T3,A,T10,A,T22,A/)') '#','X(I)','W(I)'
+	DO 11 I=1,NPOINT
+		WRITE(*,'(1X,I2,2F12.6)') I,X(I),W(I)
+11	CONTINUE
+C	Demonstrate the use of GAULEG for an integral
+	CALL GAULEG(X1,X3,X,W,NPOINT)
+	XX=0.0
+	DO 12 I=1,NPOINT
+		XX=XX+W(I)*FUNC(X(I))
+12	CONTINUE
+	WRITE(*,'(/1X,A,F12.6)') 'Integral from GAULEG:',XX
+	WRITE(*,'(1X,A,F12.6)') 'Actual value:',1.0-(1.0+X3)*EXP(-X3)
+	END
+
+	FUNCTION FUNC(X)
+	FUNC=X*EXP(-X)
+	END

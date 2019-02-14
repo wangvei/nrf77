@@ -1,0 +1,37 @@
+	PROGRAM D5R4
+C	Driver for routine CHEBFT
+	PARAMETER(NVAL=40, PIO2=1.5707963, EPS=1E-6)
+	EXTERNAL FUNC
+	DIMENSION C(NVAL)
+	A=-PIO2
+	B=PIO2
+	CALL CHEBFT(A,B,C,NVAL,FUNC)
+C	Test result
+10	WRITE(*,*) 'How many terms in Chebyshev evaluation?'
+	WRITE(*,'(1X,A,I2,A)') 'Enter n between 6 and ',NVAL,
+     *				'. Enter n=0 to end.'
+	READ(*,*) MVAL
+	IF ((MVAL.LE.0).OR.(MVAL.GT.NVAL)) GOTO 20
+	WRITE(*,'(1X,T10,A,T19,A,T28,A)') 'X','Actual','Chebyshev fit'
+	DO 12 I=-8,8,1
+		X=I*PIO2/10.0
+		Y=(X-0.5*(B+A))/(0.5*(B-A))
+C	Evaluate Chebyshev polynomial without using routine CHEBEV
+		T0=1.0
+		T1=Y
+		F=C(2)*T1+C(1)*0.5
+		DO 11 J=3,MVAL
+			DUM=T1
+			T1=2.0*Y*T1-T0
+			T0=DUM
+			TERM=C(J)*T1
+			F=F+TERM
+11		CONTINUE
+		WRITE(*,'(1X,3F12.6)') X,FUNC(X),F
+12	CONTINUE
+	GOTO 10
+20	END
+
+	FUNCTION FUNC(X)
+	FUNC=(X**2)*(X**2-2.0)*SIN(X)
+	END

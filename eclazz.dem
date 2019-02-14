@@ -1,0 +1,36 @@
+	PROGRAM D8R11
+C	Driver for routine ECLAZZ
+	EXTERNAL EQUIV
+	LOGICAL EQUIV
+	PARAMETER(N=15)
+	DIMENSION NF(N),NFLAG(N),NSAV(N)
+	CALL ECLAZZ(NF,N,EQUIV)
+	DO 11 I=1,N
+		NFLAG(I)=1
+11	CONTINUE
+	WRITE(*,'(/1X,A)') 'Numbers from 1-15 divided according to'
+	WRITE(*,'(1X,A/)') 'their value modulo 4:'
+	LCLAS=0
+	DO 13 I=1,N
+		NCLASS=NF(I)
+		IF(NFLAG(NCLASS).NE.0) THEN
+			NFLAG(NCLASS)=0
+			LCLAS=LCLAS+1
+			K=0
+			DO 12 J=I,N
+				IF (NF(J).EQ.NF(I)) THEN
+					K=K+1
+					NSAV(K)=J
+				ENDIF
+12			CONTINUE
+			WRITE(*,'(1X,A,I2,A,3X,5I3)') 'Class',
+     *				LCLAS,':',(NSAV(J),J=1,K)
+		ENDIF
+13	CONTINUE
+	END
+
+	LOGICAL FUNCTION EQUIV(I,J)
+	EQUIV=.FALSE.
+	IF (MOD(I,4).EQ.MOD(J,4)) EQUIV=.TRUE.
+	RETURN
+	END

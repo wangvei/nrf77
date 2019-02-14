@@ -1,0 +1,61 @@
+	PROGRAM D17R2
+C	Driver for routine ADI
+	IMPLICIT REAL*8(A-H,O-Z)
+	PARAMETER(JMAX=11,PI=3.1415926)
+	DIMENSION A(JMAX,JMAX),B(JMAX,JMAX),C(JMAX,JMAX),D(JMAX,JMAX),
+     *		E(JMAX,JMAX),F(JMAX,JMAX),G(JMAX,JMAX),U(JMAX,JMAX)
+	DO 12 I=1,JMAX
+		DO 11 J=1,JMAX
+			A(I,J)=-1.0
+			B(I,J)=2.0
+			C(I,J)=-1.0
+			D(I,J)=-1.0
+			E(I,J)=2.0
+			F(I,J)=-1.0
+			G(I,J)=0.0
+			U(I,J)=0.0
+11		CONTINUE
+12	CONTINUE
+	MID=JMAX/2+1
+	G(MID,MID)=2.0
+	ALPHA=2.0*(1.0-COS(PI/JMAX))
+	BETA=2.0*(1.0-COS((JMAX-1)*PI/JMAX))
+	ALIM=LOG(4.0*JMAX/PI)
+	K=0
+1	K=K+1
+	IF (2**K .LT. ALIM) GOTO 1
+	EPS=1.0E-4
+	CALL ADI(A,B,C,D,E,F,G,U,JMAX,K,ALPHA,BETA,EPS)
+	WRITE(*, '(1X,A)') 'ADI Solution:'
+	DO 13 I=1,JMAX
+		WRITE(*,'(1X,11F7.2)') (U(I,J),J=1,JMAX)
+13	CONTINUE
+	WRITE(*,'(/1X,A)') 'Test that solution satisfies Difference Eqns:'
+	DO 15 I=2,JMAX-1
+		DO 14 J=2,JMAX-1
+			G(I,J)=-4.0*U(I,J)+U(I+1,J)
+     *				+U(I-1,J)+U(I,J-1)+U(I,J+1)
+14		CONTINUE
+		WRITE(*,'(8X,9F7.2)') (G(I,J),J=2,JMAX-1)
+15	CONTINUE
+	END
+
+	SUBROUTINE TRIDAG(A,B,C,R,U,N)
+C	This is a double precision version for use with ADI
+	IMPLICIT REAL*8(A-H,O-Z)
+	PARAMETER (NMAX=100)
+	DIMENSION GAM(NMAX),A(N),B(N),C(N),R(N),U(N)
+	IF(B(1).EQ.0.)PAUSE
+	BET=B(1)
+	U(1)=R(1)/BET
+	DO 11 J=2,N
+		GAM(J)=C(J-1)/BET
+		BET=B(J)-A(J)*GAM(J)
+		IF(BET.EQ.0.)PAUSE
+		U(J)=(R(J)-A(J)*U(J-1))/BET
+11	CONTINUE
+	DO 12 J=N-1,1,-1
+		U(J)=U(J)-GAM(J+1)*U(J+1)
+12	CONTINUE
+	RETURN
+	END

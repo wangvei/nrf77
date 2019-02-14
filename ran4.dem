@@ -1,0 +1,22 @@
+	PROGRAM D7R12
+C	Driver for routine RAN4
+	PARAMETER(NPT=50)
+	DIMENSION Y(NPT)
+	IDUM=-123
+	AVE=0.0
+	WRITE(*,'(1X,A,I5/)') 'First 10 random numbers with IDUM =',IDUM
+	WRITE(*,'(1X,A4,A11)') '#','RAN4'
+	DO 11 J=1,10
+		WRITE(*,'(1X,I4,F12.6)') J,RAN4(IDUM)
+11	CONTINUE
+	WRITE(*,'(/1X,A,I3)') 'Average and Variance of next ',NPT
+	DO 12 J=1,NPT
+		Y(J)=RAN4(IDUM)
+12	CONTINUE
+	CALL AVEVAR(Y,NPT,AVE,VAR)
+	WRITE(*,'(/1X,A,F10.4)') 'Average: ',AVE
+	WRITE(*,'(1X,A,F10.4/)') 'Variance:',VAR
+	WRITE(*,'(/1X,A)') 'Expected Result for an Infinite Sample:'
+	WRITE(*,'(/1X,A,F10.4)') 'Average: ',0.5
+	WRITE(*,'(1X,A,F10.4/)') 'Variance:',1./12.
+	END

@@ -1,0 +1,28 @@
+	PROGRAM D5R2
+C	Driver for routine DDPOLY
+C	Polynomial (X-1)**5
+	PARAMETER(NC=6,NCM1=5,NP=20)
+	DIMENSION C(NC),PD(NCM1),D(NCM1,NP)
+	CHARACTER A(NCM1)*15
+	DATA A/'polynomial:','first deriv:','second deriv:',
+     *		'third deriv:','fourth deriv:'/
+	DATA C/-1.0,5.0,-10.0,10.0,-5.0,1.0/
+	DO 12 I=1,NP
+		X=0.1*I
+		CALL DDPOLY(C,NC,X,PD,NC-1)
+		DO 11 J=1,NC-1
+			D(J,I)=PD(J)
+11		CONTINUE
+12	CONTINUE
+	DO 14 I=1,NC-1
+		WRITE(*,'(1X,T7,A)') A(I)
+		WRITE(*,'(1X,T13,A,T25,A,T40,A)') 'X','DDPOLY','actual'
+		DO 13 J=1,NP
+			X=0.1*J
+			WRITE(*,'(1X,3F15.6)') X,D(I,J),
+     *  		    FACTRL(NC-1)/FACTRL(NC-I)*((X-1.0)**(NC-I))
+13		CONTINUE
+		WRITE(*,*) 'press ENTER to continue...'
+		READ(*,*)
+14	CONTINUE
+	END

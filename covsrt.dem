@@ -1,0 +1,66 @@
+	PROGRAM D14R3
+C	Driver for routine COVSRT
+	PARAMETER(MA=10,MFIT=5)
+	DIMENSION COVAR(MA,MA),LISTA(MFIT)
+	DO 12 I=1,MA
+		DO 11 J=1,MA
+			COVAR(I,J)=0.0
+			IF (I.LE.5 .AND. J.LE.5) THEN
+				COVAR(I,J)=I+J-1
+			ENDIF
+11		CONTINUE
+12	CONTINUE
+	WRITE(*,'(//2X,A)') 'Original matrix'
+	DO 13 I=1,MA
+		WRITE(*,'(1X,10F4.1)') (COVAR(I,J),J=1,MA)
+13	CONTINUE
+	WRITE(*,*) ' press RETURN to continue...'
+	READ(*,*)
+C	Test 1 - spread by 2
+	WRITE(*,'(/2X,A)') 'Test #1 - Spread by two'
+	DO 14 I=1,MFIT
+		LISTA(I)=2*I
+14	CONTINUE
+	CALL COVSRT(COVAR,MA,MA,LISTA,MFIT)
+	DO 15 I=1,MA
+		WRITE(*,'(1X,10F4.1)') (COVAR(I,J),J=1,MA)
+15	CONTINUE
+	WRITE(*,*) ' press RETURN to continue...'
+	READ(*,*)
+C	Test 2 - reverse
+	WRITE(*,'(/2X,A)') 'Test #2 - Reverse'
+	DO 17 I=1,MA
+		DO 16 J=1,MA
+			COVAR(I,J)=0.0
+			IF (I.LE.5 .AND. J.LE.5) THEN
+				COVAR(I,J)=I+J-1
+			ENDIF
+16		CONTINUE
+17	CONTINUE
+	DO 18 I=1,MFIT
+		LISTA(I)=MFIT+1-I		
+18	CONTINUE
+	CALL COVSRT(COVAR,MA,MA,LISTA,MFIT)
+	DO 19 I=1,MA
+		WRITE(*,'(1X,10F4.1)') (COVAR(I,J),J=1,MA)
+19	CONTINUE
+	WRITE(*,*) ' press RETURN to continue...'
+	READ(*,*)
+C	Test 3 - spread and reverse
+	WRITE(*,'(/2X,A)') 'Test #3 - Spread and reverse'
+	DO 22 I=1,MA
+		DO 21 J=1,MA
+			COVAR(I,J)=0.0
+			IF (I.LE.5 .AND. J.LE.5) THEN
+				COVAR(I,J)=I+J-1
+			ENDIF
+21		CONTINUE
+22	CONTINUE
+	DO 23 I=1,MFIT
+		LISTA(I)=MA+2-2*I
+23	CONTINUE
+	CALL COVSRT(COVAR,MA,MA,LISTA,MFIT)
+	DO 24 I=1,MA
+		WRITE(*,'(1X,10F4.1)') (COVAR(I,J),J=1,MA)
+24	CONTINUE
+	END

@@ -1,0 +1,24 @@
+	PROGRAM D4R1
+C	Driver for routine TRAPZD
+	PARAMETER(NMAX=14, PIO2=1.5707963)
+	EXTERNAL FUNC,FINT
+	A=0.0
+	B=PIO2
+	WRITE(*,'(1X,A)') 'Integral of FUNC with 2^(n-1) points'
+	WRITE(*,'(1X,A,F10.6)') 'Actual value of integral is',FINT(B)-FINT(A)
+	WRITE(*,'(1X,T7,A,T16,A)') 'n','Approx. Integral'
+	DO 11 I=1,NMAX
+		CALL TRAPZD(FUNC,A,B,S,I)
+		WRITE(*,'(1X,I6,F20.6)') I,S
+11	CONTINUE
+	END
+
+	FUNCTION FUNC(X)
+	FUNC=(X**2)*(X**2-2.0)*SIN(X)
+	END
+
+	FUNCTION FINT(X)
+C	Integral of FUNC
+	FINT=4.0*X*((X**2)-7.0)*SIN(X)
+     *		-((X**4)-14.0*(X**2)+28.0)*COS(X)
+	END

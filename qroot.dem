@@ -1,0 +1,29 @@
+	PROGRAM D9R12
+C	Driver for routine QROOT
+	PARAMETER(N=7,EPS=1.0E-6,NTRY=10,TINY=1.0E-5)
+	DIMENSION P(N),B(NTRY),C(NTRY)
+	DATA P/10.0,-18.0,25.0,-24.0,16.0,-6.0,1.0/
+	WRITE(*,'(/1X,A)') 'P(x)=x^6-6x^5+16x^4-24x^3+25x^2-18x+10'
+	WRITE(*,'(1X,A)') 'Quadratic factors x^2+Bx+C'
+	WRITE(*,'(/1X,A,T15,A,T27,A/)') 'Factor','B','C'
+	NROOT=0
+	DO 12 I=1,NTRY
+		C(I)=0.5*I
+		B(I)=-0.5*I
+		CALL QROOT(P,N,B(I),C(I),EPS)
+		IF (NROOT.EQ.0) THEN
+			WRITE(*,'(1X,I3,2X,2F12.6)') NROOT,B(I),C(I)
+			NROOT=1
+		ELSE
+			NFLAG=0
+			DO 11 J=1,NROOT		     
+				IF (ABS(B(I)-B(J)).LT.TINY
+     *				.AND. ABS(C(I)-C(J)).LT.TINY) NFLAG=1
+11			CONTINUE
+			IF (NFLAG.EQ.0) THEN
+				WRITE(*,'(1X,I3,2X,2F12.6)') NROOT,B(I),C(I)
+				NROOT=NROOT+1
+			ENDIF
+		ENDIF
+12	CONTINUE
+	END

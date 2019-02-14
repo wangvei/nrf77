@@ -1,0 +1,25 @@
+	PROGRAM D3R9
+C	Driver for routine POLIN2
+	PARAMETER(N=5,PI=3.141593)
+	DIMENSION X1A(N),X2A(N),YA(N,N)
+	DO 12 I=1,N
+		X1A(I)=I*PI/N
+		DO 11 J=1,N
+			X2A(J)=1.0*J/N
+			YA(I,J)=SIN(X1A(I))*EXP(X2A(J))
+11		CONTINUE
+12  	CONTINUE
+C	Test 2-dimensional interpolation
+	WRITE(*,'(T9,A,T21,A,T32,A,T40,A,T58,A)')
+     *  'x1','x2','f(x)','interpolated','error'
+	DO 14 I=1,4
+	X1=(-0.1+I/5.0)*PI
+		DO 13 J=1,4
+			X2=-0.1+J/5.0
+			F=SIN(X1)*EXP(X2)
+			CALL POLIN2(X1A,X2A,YA,N,N,X1,X2,Y,DY)
+			WRITE(*,'(1X,4F12.6,F14.6)') X1,X2,F,Y,DY
+13		CONTINUE
+		WRITE(*,*) '***********************************'
+14	CONTINUE
+	END

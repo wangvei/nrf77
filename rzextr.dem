@@ -1,0 +1,22 @@
+	PROGRAM D15R8
+C	Driver for routine RZEXTR
+C	Feed values from a rational function
+C	Fn(x)=(1-x+x**3)/(x+1)**n
+	PARAMETER(NV=4,NUSE=5)
+	DIMENSION YEST(NV),YZ(NV),DY(NV)
+	DO 12 I=1,10
+		IEST=I
+		XEST=1.0/FLOAT(I)
+		DUM=1.0-XEST+XEST**3
+		DO 11 J=1,NV
+			DUM=DUM/(XEST+1.0)
+			YEST(J)=DUM
+11		CONTINUE
+		CALL RZEXTR(IEST,XEST,YEST,YZ,DY,NV,NUSE)
+		WRITE(*,'(/1X,A,I2,A,F8.4)') 'IEST = ',I,'   XEST =',XEST
+		WRITE(*,'(1X,A,4F12.6)') 'Extrap. Function: ',(YZ(J),J=1,NV)
+		WRITE(*,'(1X,A,4F12.6)') 'Estimated Error:  ',(DY(J),J=1,NV)
+12	CONTINUE
+	WRITE(*,'(/1X,A,4F12.6)') 'Actual Values:    ',1.0,1.0,1.0,1.0
+	END
+

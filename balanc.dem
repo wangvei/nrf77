@@ -1,0 +1,36 @@
+	PROGRAM D11R5
+C	Driver for routine BALANC
+	PARAMETER(NP=5)
+	DIMENSION A(NP,NP),R(NP),C(NP)
+	DATA A/1.0,1.0,1.0,1.0,1.0,100.0,1.0,100.0,1.0,100.0,
+     *		1.0,1.0,1.0,1.0,1.0,100.0,1.0,100.0,1.0,100.0,
+     *		1.0,1.0,1.0,1.0,1.0/
+C	Print norms
+	DO 12 I=1,NP
+		R(I)=0.0
+		C(I)=0.0
+		DO 11 J=1,NP
+			R(I)=R(I)+ABS(A(I,J))
+			C(I)=C(I)+ABS(A(J,I))
+11		CONTINUE
+12	CONTINUE
+	WRITE(*,*) 'Rows:'
+	WRITE(*,*) (R(I),I=1,NP)
+	WRITE(*,*) 'Columns:'
+	WRITE(*,*) (C(I),I=1,NP)
+	WRITE(*,'(/1X,A/)') '***** Balancing Matrix *****'
+	CALL BALANC(A,NP,NP)
+C	Print norms
+	DO 14 I=1,NP
+		R(I)=0.0
+		C(I)=0.0
+		DO 13 J=1,NP
+			R(I)=R(I)+ABS(A(I,J))
+			C(I)=C(I)+ABS(A(J,I))
+13		CONTINUE
+14	CONTINUE
+	WRITE(*,*) 'Rows:'
+	WRITE(*,*) (R(I),I=1,NP)
+	WRITE(*,*) 'Columns:'
+	WRITE(*,*) (C(I),I=1,NP)
+	END

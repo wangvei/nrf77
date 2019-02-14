@@ -1,0 +1,17 @@
+	PROGRAM D13R15
+C	Driver for routine PEARSN
+	DIMENSION DOSE(10),SPORE(10)
+	DATA DOSE/56.1,64.1,70.0,66.6,82.,91.3,90.,99.7,115.3,110./
+	DATA SPORE/0.11,0.4,0.37,0.48,0.75,0.66,0.71,1.2,1.01,0.95/
+	WRITE(*,'(1X,A)') 
+     *		'Effect of Gamma Rays on Man-in-the-Moon Marigolds'
+	WRITE(*,'(1X,A,T29,A)') 'Count Rate (cpm)','Pollen Index'
+	DO 11 I=1,10
+		WRITE(*,'(1X,F10.2,F25.2)') DOSE(I),SPORE(I)
+11	CONTINUE
+	CALL PEARSN(DOSE,SPORE,10,R,PROB,Z)	
+	WRITE(*,'(/1X,T24,A,T38,A)') 'PEARSN','Expected'
+	WRITE(*,'(1X,A,T18,2E15.6)') 'Corr. Coeff.',R,0.906959
+	WRITE(*,'(1X,A,T18,2E15.6)') 'Probability',PROB,0.292650E-3
+	WRITE(*,'(1X,A,T18,2E15.6/)') 'Fisher''s Z',Z,1.51011
+	END

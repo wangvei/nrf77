@@ -1,0 +1,75 @@
+	PROGRAM D16R1
+C	Driver for routine SHOOT
+C	Solves for eigenvalues of Spheroidal Harmonics. Both
+C	Prolate and Oblate case are handled simultaneously, leading
+C	to six first-order equations. Unknown to SHOOT, these are 
+C	actually two independent sets of three coupled equations,
+C	one set with c^2 positive and the other with c^2 negative.
+	PARAMETER(NVAR=6,N2=2,DELTA=1.0E-3,EPS=1.0E-6,DX=1.0E-4)
+	DIMENSION V(2),DELV(2),F(2),DV(2)
+	COMMON C2,M,N,FACTR
+1	WRITE(*,*) 'Input M,N,C-Squared (999 to end)'
+	READ(*,*) M,N,C2
+	IF (C2.EQ.999.) STOP
+	IF ((N.LT.M).OR.(M.LT.0).OR.(N.LT.0)) GOTO 1
+	FACTR=1.0
+	IF (M.NE.0) THEN
+		Q1=N
+		DO 11 I=1,M
+			FACTR=-0.5*FACTR*(N+I)*(Q1/I)
+			Q1=Q1-1.0
+11		CONTINUE
+	ENDIF
+	V(1)=N*(N+1)-M*(M+1)+C2/2.0
+	V(2)=N*(N+1)-M*(M+1)-C2/2.0
+	DELV(1)=DELTA*V(1)
+	DELV(2)=DELV(1)
+	H1=0.1
+	HMIN=0.0
+	X1=-1.0+DX
+	X2=0.0
+	WRITE(*,'(1X,T12,A,T36,A)') 'Prolate','Oblate'
+	WRITE(*,'(1X,T6,A,T17,A,T30,A,T41,A)') 
+     *		'Mu(M,N)','Error Est.','Mu(M,N)','Error Est.'
+2	CALL SHOOT(NVAR,V,DELV,N2,X1,X2,EPS,H1,HMIN,F,DV)
+	WRITE(*,'(1X,4F12.6)') V(1),DV(1),V(2),DV(2)
+	IF ((ABS(DV(1)).GT.ABS(EPS*V(1))).OR.
+     *		((DV(2)).GT.ABS(EPS*V(2)))) GOTO 2
+	END
+
+	SUBROUTINE LOAD(X1,V,Y)
+	COMMON C2,M,N,FACTR
+	DIMENSION V(2),Y(6)
+	Y(3)=V(1)
+	Y(2)=-(Y(3)-C2)*FACTR/2.0/(M+1.0)
+	Y(1)=FACTR+Y(2)*DX
+	Y(6)=V(2)
+	Y(5)=-(Y(6)+C2)*FACTR/2.0/(M+1.0)
+	Y(4)=FACTR+Y(5)*DX
+	RETURN
+	END
+
+	SUBROUTINE SCORE(X2,Y,F)
+	COMMON C2,M,N
+	DIMENSION Y(6),F(2)
+	IF (MOD((N-M),2).EQ.0) THEN
+		F(1)=Y(2)
+		F(2)=Y(5)
+	ELSE 
+		F(1)=Y(1)
+		F(2)=Y(4)
+	ENDIF
+	RETURN
+	END
+
+	SUBROUTINE DERIVS(X,Y,DYDX)
+	COMMON C2,M,N
+	DIMENSION Y(6),DYDX(6)
+	DYDX(1)=Y(2)
+	DYDX(3)=0.0
+	DYDX(2)=(2.0*X*(M+1.0)*Y(2)-(Y(3)-C2*X*X)*Y(1))/(1.0-X*X)
+	DYDX(4)=Y(5)
+	DYDX(6)=0.0
+	DYDX(5)=(2.0*X*(M+1.0)*Y(5)-(Y(6)+C2*X*X)*Y(4))/(1.0-X*X)
+	RETURN
+	END

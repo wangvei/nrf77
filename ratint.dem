@@ -1,0 +1,19 @@
+	PROGRAM D3R2
+C	Driver for routine RATINT
+	PARAMETER(NPT=6,EPSSQ=1.0)
+	DIMENSION X(NPT),Y(NPT)
+	F(X)=X*EXP(-X)/((X-1.0)**2+EPSSQ)
+	DO 11 I=1,NPT
+		X(I)=I*2.0/NPT
+		Y(I)=F(X(I))
+11	CONTINUE
+	WRITE(*,'(/1X,A/)') 'Diagonal rational function interpolation'
+	WRITE(*,'(1X,T6,A,T13,A,T26,A,T40,A)') 
+     *		'x','interp.','accuracy','actual'
+	DO 12 I=1,10
+		XX=0.2*I
+		CALL RATINT(X,Y,NPT,XX,YY,DYY)
+		YEXP=F(XX)
+		WRITE(*,'(1X,F6.2,F12.6,E15.4,F12.6)') XX,YY,DYY,YEXP
+12	CONTINUE
+	END

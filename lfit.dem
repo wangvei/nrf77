@@ -1,0 +1,79 @@
+	PROGRAM D14R2
+C	Driver for routine LFIT
+	PARAMETER(NPT=100,SPREAD=0.1,NTERM=3)
+	DIMENSION X(NPT),Y(NPT),SIG(NPT),A(NTERM),COVAR(NTERM,NTERM),
+     *			LISTA(NTERM)
+	EXTERNAL FUNCS
+	IDUM=-911
+	DO 12 I=1,NPT
+		X(I)=0.1*I
+		Y(I)=FLOAT(NTERM)
+		DO 11 J=NTERM-1,1,-1
+			Y(I)=J+Y(I)*X(I)
+11		CONTINUE
+		Y(I)=Y(I)+SPREAD*GASDEV(IDUM)
+		SIG(I)=SPREAD
+12	CONTINUE
+	MFIT=NTERM
+	DO 13 I=1,MFIT
+		LISTA(I)=I
+13	CONTINUE
+	CALL LFIT(X,Y,SIG,NPT,A,NTERM,LISTA,MFIT,COVAR,NTERM,CHISQ,FUNCS)
+	WRITE(*,'(/1X,T4,A,T22,A)') 'Parameter','Uncertainty'
+	DO 14 I=1,NTERM
+		WRITE(*,'(1X,T5,A,I1,A,F8.6,F11.6)') 'A(',I,') = ',
+     *			A(I),SQRT(COVAR(I,I))
+14	CONTINUE
+	WRITE(*,'(/3X,A,E12.6)') 'Chi-squared = ',CHISQ
+	WRITE(*,'(/3X,A)') 'Full covariance matrix'
+	DO 15 I=1,NTERM
+		WRITE(*,'(1X,4E12.2)') (COVAR(I,J),J=1,NTERM)
+15	CONTINUE
+	WRITE(*,'(/1X,A)') 'press RETURN to continue...'
+	READ(*,*)
+C	Now test the LISTA feature
+	DO 16 I=1,NTERM
+		LISTA(I)=NTERM+1-I
+16	CONTINUE
+	CALL LFIT(X,Y,SIG,NPT,A,NTERM,LISTA,MFIT,COVAR,NTERM,CHISQ,FUNCS)
+	WRITE(*,'(/1X,T4,A,T22,A)') 'Parameter','Uncertainty'
+	DO 17 I=1,NTERM
+		WRITE(*,'(1X,T5,A,I1,A,F8.6,F11.6)') 'A(',I,') = ',
+     *			A(I),SQRT(COVAR(I,I))
+17	CONTINUE
+	WRITE(*,'(/3X,A,E12.6)') 'Chi-squared = ',CHISQ
+	WRITE(*,'(/3X,A)') 'Full covariance matrix'
+	DO 18 I=1,NTERM
+		WRITE(*,'(1X,4E12.2)') (COVAR(I,J),J=1,NTERM)
+18	CONTINUE
+	WRITE(*,'(/1X,A)') 'press RETURN to continue...'
+	READ(*,*)
+C	Now check results of restricting fit parameters
+	II=1
+	DO 19 I=1,NTERM
+		IF (MOD(I,2).EQ.1) THEN
+			LISTA(II)=I
+			II=II+1
+		ENDIF
+19	CONTINUE
+	MFIT=II-1
+	CALL LFIT(X,Y,SIG,NPT,A,NTERM,LISTA,MFIT,COVAR,NTERM,CHISQ,FUNCS)
+	WRITE(*,'(/1X,T4,A,T22,A)') 'Parameter','Uncertainty'
+	DO 21 I=1,NTERM
+		WRITE(*,'(1X,T5,A,I1,A,F8.6,F11.6)') 'A(',I,') = ',A(I),
+     *			SQRT(COVAR(I,I))
+21	CONTINUE
+	WRITE(*,'(/3X,A,E12.6)') 'Chi-squared = ',CHISQ
+	WRITE(*,'(/3X,A)') 'Full covariance matrix'
+	DO 22 I=1,NTERM
+		WRITE(*,'(1X,4E12.2)') (COVAR(I,J),J=1,NTERM)
+22	CONTINUE
+	END
+
+	SUBROUTINE FUNCS(X,AFUNC,MA)
+	DIMENSION AFUNC(MA)
+	AFUNC(1)=1.0
+	DO 11 I=2,MA
+		AFUNC(I)=X*AFUNC(I-1)
+11	CONTINUE
+	END

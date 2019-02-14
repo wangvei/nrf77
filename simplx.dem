@@ -1,0 +1,45 @@
+	PROGRAM D10R12
+C	Driver for routine SIMPLX
+C	Incorporates examples discussed in text
+	PARAMETER(N=4,M=4,NP=5,MP=6,M1=2,M2=1,M3=1,NM1M2=N+M1+M2)
+	DIMENSION A(MP,NP),IZROV(N),IPOSV(M),ANUM(NP)
+	CHARACTER TXT(NM1M2)*2,ALPHA(NP)*2
+	DATA TXT/'x1','x2','x3','x4','y1','y2','y3'/
+	DATA A/0.0,740.0,0.0,0.5,9.0,0.0,1.0,-1.0,0.0,0.0,-1.0,0.0,
+     *		1.0,0.0,-2.0,-1.0,-1.0,0.0,3.0,-2.0,0.0,1.0,-1.0,0.0,
+     *		-0.5,0.0,7.0,-2.0,-1.0,0.0/
+	CALL SIMPLX(A,M,N,MP,NP,M1,M2,M3,ICASE,IZROV,IPOSV)
+	IF (ICASE.EQ.1) THEN
+		WRITE(*,*) 'Unbounded objective function'
+	ELSE IF (ICASE.EQ.-1) THEN
+		WRITE(*,*) 'No solutions satisfy constraints given'
+	ELSE
+		JJ=1
+		DO 11 I=1,N
+			IF (IZROV(I).LE.(N+M1+M2)) THEN
+				ALPHA(JJ)=TXT(IZROV(I))
+				JJ=JJ+1
+			ENDIF
+11		CONTINUE
+		JMAX=JJ-1
+		WRITE(*,'(/3X,5A10)') '  ',(ALPHA(JJ),JJ=1,JMAX)		
+		DO 13 I=1,M+1
+			IF (I.GT.1) THEN 
+				ALPHA(1)=TXT(IPOSV(I-1))
+			ELSE
+				ALPHA(1)='  '
+			ENDIF
+			ANUM(1)=A(I,1)
+			JJ=2
+			DO 12 J=2,N+1
+				IF (IZROV(J-1).LE.(N+M1+M2)) THEN
+					ANUM(JJ)=A(I,J)
+					JJ=JJ+1
+				ENDIF
+12			CONTINUE
+			JMAX=JJ-1
+			WRITE(*,'(1X,A3,(5F10.2))') ALPHA(1),
+     *				(ANUM(JJ),JJ=1,JMAX)
+13		CONTINUE
+	ENDIF
+	END

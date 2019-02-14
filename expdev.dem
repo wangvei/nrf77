@@ -1,0 +1,33 @@
+	PROGRAM D7R5
+C	Driver for routine EXPDEV
+	PARAMETER(NPTS=10000,EE=2.718281828)
+	DIMENSION TRIG(21),X(21)
+	DO 11 I=1,21
+		TRIG(I)=(I-1)/20.0
+		X(I)=0.0
+11	CONTINUE
+	IDUM=-1
+	DO 13 I=1,NPTS
+		Y=EXPDEV(IDUM)
+		DO 12 J=2,21
+			IF((Y.LT.TRIG(J)).AND.(Y.GT.TRIG(J-1))) THEN
+				X(J)=X(J)+1.0
+			ENDIF
+12		CONTINUE
+13	CONTINUE
+	TOTAL=0.0
+	DO 14 I=2,21
+		TOTAL=TOTAL+X(I)
+14	CONTINUE
+	WRITE(*,'(1X,A,I6,A)') 'Exponential distribution with',
+     *		NPTS,' points:'
+	WRITE(*,'(1X,T5,A,T19,A,T31,A)')
+     *		'interval','observed','expected'
+	DO 15 I=2,21
+		X(I)=X(I)/TOTAL
+		EXPECT=EXP(-(TRIG(I-1)+TRIG(I))/2.0)
+		EXPECT=EXPECT*0.05*EE/(EE-1)
+		WRITE(*,'(1X,2F6.2,2F12.4)')
+     *			TRIG(I-1),TRIG(I),X(I),EXPECT
+15	CONTINUE
+	END

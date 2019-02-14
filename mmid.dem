@@ -1,0 +1,41 @@
+	PROGRAM D15R5
+C	Driver for routine MMID
+	EXTERNAL DERIVS
+	PARAMETER(NVAR=4,X1=1.0,HTOT=0.5)
+	DIMENSION Y(NVAR),YOUT(NVAR),DYDX(NVAR)
+	Y(1)=BESSJ0(X1)
+	Y(2)=BESSJ1(X1)
+	Y(3)=BESSJ(2,X1)
+	Y(4)=BESSJ(3,X1)
+	DYDX(1)=-Y(2)
+	DYDX(2)=Y(1)-Y(2)
+	DYDX(3)=Y(2)-2.0*Y(3)
+	DYDX(4)=Y(3)-3.0*Y(4)
+	XF=X1+HTOT
+	B1=BESSJ0(XF)
+	B2=BESSJ1(XF)
+	B3=BESSJ(2,XF)
+	B4=BESSJ(3,XF)
+	WRITE(*,'(1X,A/)') 'First four Bessel functions'
+	DO 11 I=5,50,5
+		CALL MMID(Y,DYDX,NVAR,X1,HTOT,I,YOUT,DERIVS)
+		WRITE(*,'(1X,A,F6.4,A,F6.4,A,I2,A)') 'X = ',X1,
+     *			' to ',X1+HTOT,' in ',I,' steps'
+		WRITE(*,'(1X,T5,A,T20,A)') 'Integration','BESSJ'
+		WRITE(*,'(1X,2F12.6)') YOUT(1),B1
+		WRITE(*,'(1X,2F12.6)') YOUT(2),B2
+		WRITE(*,'(1X,2F12.6)') YOUT(3),B3
+		WRITE(*,'(1X,2F12.6)') YOUT(4),B4
+		WRITE(*,'(/1X,A)') 'press RETURN to continue...'
+		READ(*,*)
+11	CONTINUE
+	END
+
+	SUBROUTINE DERIVS(X,Y,DYDX)
+	DIMENSION Y(1),DYDX(1)
+	DYDX(1)=-Y(2)
+	DYDX(2)=Y(1)-(1.0/X)*Y(2)
+	DYDX(3)=Y(2)-(2.0/X)*Y(3)
+	DYDX(4)=Y(3)-(3.0/X)*Y(4)
+	END
+

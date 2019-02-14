@@ -1,0 +1,33 @@
+	PROGRAM D5R6
+C	Driver for routine CHINT
+	PARAMETER(NVAL=40, PIO2=1.5707963)
+	EXTERNAL FUNC,FINT
+	DIMENSION C(NVAL),CINT(NVAL)
+	A=-PIO2
+	B=PIO2
+	CALL CHEBFT(A,B,C,NVAL,FUNC)
+C	Test integral
+10	WRITE(*,*) 'How many terms in Chebyshev evaluation?'
+	WRITE(*,'(1X,A,I2,A)') 'Enter n between 6 and ',NVAL,
+     *				'. Enter n=0 to end.'
+	READ(*,*) MVAL
+	IF ((MVAL.LE.0).OR.(MVAL.GT.NVAL)) GOTO 20
+	CALL CHINT(A,B,C,CINT,MVAL)
+	WRITE(*,'(1X,T10,A,T19,A,T29,A)') 'X','Actual','Cheby. Integ.'
+	DO 11 I=-8,8,1
+		X=I*PIO2/10.0
+		WRITE(*,'(1X,3F12.6)') X,FINT(X)-FINT(-PIO2)
+     *				,CHEBEV(A,B,CINT,MVAL,X)
+11	CONTINUE
+	GOTO 10
+20	END
+
+	FUNCTION FUNC(X)
+	FUNC=(X**2)*(X**2-2.0)*SIN(X)
+	END
+
+	FUNCTION FINT(X)
+C	Integral of FUNC
+	FINT=4.0*X*((X**2)-7.0)*SIN(X)
+     *		-((X**4)-14.0*(X**2)+28.0)*COS(X)
+	END

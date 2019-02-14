@@ -1,0 +1,31 @@
+	PROGRAM D9R10
+C	Driver for routine LAGUER
+	PARAMETER(M=4,MP1=M+1,NTRY=21,EPS=1.0E-6)
+	COMPLEX A(MP1),Y(NTRY),X
+	LOGICAL POLISH
+	DATA A/(0.0,2.0),(0.0,0.0),(-1.0,-2.0),(0.0,0.0),(1.0,0.0)/
+	WRITE(*,'(/1X,A)') 'Roots of polynomial x^4-(1+2i)*x^2+2i'
+	WRITE(*,'(/1X,T16,A,T29,A/)') 'Real','Complex'
+	N=0
+	POLISH=.FALSE.
+	DO 12 I=1,NTRY
+		X=CMPLX((I-11.0)/10.0,(I-11.0)/10.0)
+		CALL LAGUER(A,M,X,EPS,POLISH)
+		IF (N.EQ.0) THEN
+			N=1
+			Y(1)=X
+			WRITE(*,'(1X,I5,2F15.6)') N,X
+		ELSE
+			IFLAG=0
+			DO 11 J=1,N
+				IF (CABS(X-Y(J)).LE.
+     *					EPS*CABS(X)) IFLAG=1
+11			CONTINUE
+			IF (IFLAG.EQ.0) THEN
+				N=N+1
+				Y(N)=X
+				WRITE(*,'(1X,I5,2F15.6)') N,X
+			ENDIF
+		ENDIF
+12	CONTINUE
+	END

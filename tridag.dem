@@ -1,0 +1,43 @@
+	PROGRAM D2R4
+C	Driver for routine TRIDAG
+	PARAMETER (NP=20)
+	DIMENSION DIAG(NP),SUPERD(NP),SUBD(NP),RHS(NP),U(NP)
+	CHARACTER TXT*3
+	OPEN(UNIT=5,FILE='MATRX2.DAT',STATUS='OLD')
+10	READ(5,'(A3)') TXT
+	IF (TXT.EQ.'END') GOTO 99
+	READ(5,*)
+	READ(5,*) N
+	READ(5,*)
+	READ(5,*) (DIAG(K), K=1,N)
+	READ(5,*)
+	READ(5,*) (SUPERD(K), K=1,N-1)
+	READ(5,*)
+	READ(5,*) (SUBD(K), K=2,N)
+	READ(5,*)
+	READ(5,*) (RHS(K), K=1,N)
+C	Carry out solution
+	CALL TRIDAG(SUBD,DIAG,SUPERD,RHS,U,N)
+	WRITE(*,*) 'The solution vector is:'
+	WRITE(*,'(1X,6F12.6)') (U(K), K=1,N)
+C	Test solution
+	WRITE(*,*) '(matrix)*(sol''n vector) should be:'
+	WRITE(*,'(1X,6F12.6)') (RHS(K), K=1,N)
+	WRITE(*,*) 'Actual result is:'
+	DO 11 K=1,N
+		IF (K.EQ.1) THEN
+			RHS(K)=DIAG(1)*U(1) + SUPERD(1)*U(2)
+		ELSE IF (K.EQ.N) THEN
+			RHS(K)=SUBD(N)*U(N-1) + DIAG(N)*U(N)
+		ELSE
+			RHS(K)=SUBD(K)*U(K-1) + DIAG(K)*U(K)
+     *				+ SUPERD(K)*U(K+1)
+		ENDIF
+11	CONTINUE
+	WRITE(*,'(1X,6F12.6)') (RHS(K), K=1,N)
+	WRITE(*,*) '***********************************'
+	WRITE(*,*) 'Press RETURN for next problem:'
+	READ(*,*)
+	GOTO 10
+99	CLOSE(5)
+	END

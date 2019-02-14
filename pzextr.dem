@@ -1,0 +1,22 @@
+	PROGRAM D15R9
+C	Driver for routine PZEXTR
+C	Feed values from a rational function
+C	Fn(x)=(1-x+x**3)/(x+1)**n
+	PARAMETER(NV=4,NUSE=5)
+	DIMENSION YEST(NV),YZ(NV),DY(NV)
+	DO 12 I=1,10
+		IEST=I
+		XEST=1.0/FLOAT(I)
+		DUM=1.0-XEST+XEST*XEST*XEST
+		DO 11 J=1,NV
+			DUM=DUM/(XEST+1.0)
+			YEST(J)=DUM
+11		CONTINUE
+		CALL PZEXTR(IEST,XEST,YEST,YZ,DY,NV,NUSE)
+		WRITE(*,'(/1X,A,I2)') 'I = ',I
+		WRITE(*,'(1X,A,4F12.6)') 'Extrap. function:',(YZ(J),J=1,NV)
+		WRITE(*,'(1X,A,4F12.6)') 'Estimated error: ',(DY(J),J=1,NV)
+12	CONTINUE
+	WRITE(*,'(/1X,A,4F12.6)') 'Actual values:   ',1.0,1.0,1.0,1.0
+	END
+

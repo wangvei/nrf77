@@ -1,0 +1,43 @@
+	PROGRAM D3R1
+C	Driver for routine POLINT
+	PARAMETER(NP=10,PI=3.1415926)
+	DIMENSION XA(NP),YA(NP)
+	WRITE(*,*) 'Generation of interpolation tables'
+	WRITE(*,*) ' ... sin(x)    0<x<pi'
+	WRITE(*,*) ' ... exp(x)    0<x<1 '
+	WRITE(*,*) 'How many entries go in these tables? (note: N<10)'
+	READ(*,*) N
+	DO 14 NFUNC=1,2
+		IF (NFUNC.EQ.1) THEN
+			WRITE(*,*) 'sine function from 0 to pi'
+			DO 11 I=1,N
+				XA(I)=I*PI/N
+				YA(I)=SIN(XA(I))
+11			CONTINUE
+		ELSE IF (NFUNC.EQ.2) THEN
+			WRITE(*,*) 'exponential function from 0 to 1'
+			DO 12 I=1,N
+				XA(I)=I*1.0/N
+				YA(I)=EXP(XA(I))
+12			CONTINUE
+		ELSE
+			STOP
+		ENDIF
+		WRITE(*,'(T10,A1,T20,A4,T28,A12,T46,A5)')
+     *		      	'x','f(x)','interpolated','error'
+		DO 13 I=1,10
+			IF (NFUNC.EQ.1) THEN
+				X=(-0.05+I/10.0)*PI
+				F=SIN(X)
+			ELSE IF (NFUNC.EQ.2) THEN
+				X=(-0.05+I/10.0)
+				F=EXP(X)
+			ENDIF
+			CALL POLINT(XA,YA,N,X,Y,DY)
+			WRITE(*,'(1X,3F12.6,E15.4)') X,F,Y,DY
+13		CONTINUE
+		WRITE(*,*) '***********************************'
+		WRITE(*,*) 'Press RETURN'
+		READ(*,*)
+14	CONTINUE
+	END

@@ -1,0 +1,30 @@
+	PROGRAM D3R12
+C	Driver for routine SPLIE2
+	PARAMETER(M=10,N=10)
+	DIMENSION X1(M),X2(N),Y(M,N),Y2(M,N)
+	DO 11 I=1,M
+		X1(I)=0.2*I
+11	CONTINUE
+	DO 12 I=1,N
+		X2(I)=0.2*I
+12	CONTINUE
+	DO 14 I=1,M
+		DO 13 J=1,N
+			X1X2=X1(I)*X2(J)
+			Y(I,J)=X1X2**2
+13		CONTINUE
+14	CONTINUE
+	CALL SPLIE2(X1,X2,Y,M,N,Y2)
+	WRITE(*,'(/1X,A)') 'Second derivatives from SPLIE2'
+	WRITE(*,'(1X,A/)') 'Natural spline assumed'
+	DO 15 I=1,5
+		WRITE(*,'(1X,5F12.6)') (Y2(I,J),J=1,5)
+15	CONTINUE
+	WRITE(*,'(/1X,A/)') 'Actual second derivatives'
+	DO 17 I=1,5
+		DO 16 J=1,5
+			Y2(I,J)=2.0*(X1(I)**2)
+16		CONTINUE
+		WRITE(*,'(1X,5F12.6)') (Y2(I,J),J=1,5)
+17	CONTINUE
+	END

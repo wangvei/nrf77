@@ -1,0 +1,30 @@
+	PROGRAM D7R11
+C	Driver for routine IRBIT2
+C	Calculate distribution of runs of zeros
+	PARAMETER(NBIN=15,NTRIES=10000)
+	DIMENSION DELAY(NBIN)
+	ISEED=111
+	DO 11 I=1,NBIN
+		DELAY(I)=0.0
+11	CONTINUE
+	IPTS=0
+	DO 13 I=1,NTRIES
+		IF (IRBIT2(ISEED).EQ.1) THEN		
+			IPTS=IPTS+1
+			IFLG=0
+			DO 12 J=1,NBIN
+				IF ((IRBIT2(ISEED).EQ.1)
+     *				.AND.(IFLG.EQ.0)) THEN
+					IFLG=1
+					DELAY(J)=DELAY(J)+1.0
+				ENDIF
+12			CONTINUE
+		ENDIF
+13	CONTINUE
+	WRITE(*,*) 'Distribution of runs of N zeros'
+	WRITE(*,'(1X,T7,A,T16,A,T38,A)') 'N','Probability','Expected'
+	DO 14 N=1,NBIN
+		WRITE(*,'(1X,I6,F18.6,F20.6)') 
+     *			N-1,DELAY(N)/IPTS,1/(2.0**N)
+14	CONTINUE
+	END

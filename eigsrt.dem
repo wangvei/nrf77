@@ -1,0 +1,30 @@
+	PROGRAM D11R2
+C	Driver for routine EIGSRT
+	PARAMETER(NP=10)
+	DIMENSION D(NP),V(NP,NP),C(NP,NP)
+	DATA C /5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,-4.0,
+     *		4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,
+     *		3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,
+     *		2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,
+     *		1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,
+     *		0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,
+     *		-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,
+     *		-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,
+     *		-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,
+     *		-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0/
+	CALL JACOBI(C,NP,NP,D,V,NROT)
+	WRITE(*,*) 'Unsorted Eigenvectors:'
+	DO 11 I=1,NP
+		WRITE(*,'(/1X,A,I3,A,F12.6)') 'Eigenvalue',I,' =',D(I)
+		WRITE(*,*) 'Eigenvector:'
+		WRITE(*,'(10X,5F12.6)') (V(J,I),J=1,NP)
+11	CONTINUE
+	WRITE(*,'(//,A,//)') '****** sorting ******'
+	CALL EIGSRT(D,V,NP,NP)
+	WRITE(*,*) 'Sorted Eigenvectors:'
+	DO 12 I=1,NP
+		WRITE(*,'(/1X,A,I3,A,F12.6)') 'Eigenvalue',I,' =',D(I)
+		WRITE(*,*) 'Eigenvector:'
+		WRITE(*,'(10X,5F12.6)') (V(J,I),J=1,NP)
+12	CONTINUE
+	END

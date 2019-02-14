@@ -1,0 +1,25 @@
+	PROGRAM D2R7
+C	Driver for routine TOEPLZ
+	PARAMETER(N=5,N2=2*N)
+	DIMENSION X(N),Y(N),R(N2)
+	DO 11 I=1,N
+		Y(I)=0.1*I
+11	CONTINUE
+	DO 12 I=1,2*N-1
+		R(I)=0.1*I
+12	CONTINUE
+	CALL TOEPLZ(R,X,Y,N)
+	WRITE(*,*) 'Solution vector:'
+	DO 13 I=1,N
+		WRITE(*,'(5X,A2,I1,A4,E13.6)') 'X(',I,') = ',X(I)
+13	CONTINUE
+	WRITE(*,'(/1X,A)') 'Test of solution:'
+	WRITE(*,'(1X,T6,A,T19,A)') 'mtrx*soln','original'
+	DO 15 I=1,N
+		SUM=0.0
+		DO 14 J=1,N
+			SUM=SUM+R(N+I-J)*X(J)
+14		CONTINUE
+		WRITE(*,'(1X,2F12.4)') SUM,Y(I)
+15	CONTINUE
+	END

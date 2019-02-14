@@ -1,0 +1,18 @@
+	PROGRAM D5R3
+C	Driver for routine POLDIV
+C	(X-1)**5/(X+1)**3
+	PARAMETER(N=6,NV=4)
+	DIMENSION U(N),V(NV),Q(N),R(N)
+	DATA U/-1.0,5.0,-10.0,10.0,-5.0,1.0/
+	DATA V/1.0,3.0,3.0,1.0/
+	CALL POLDIV(U,N,V,NV,Q,R)
+	WRITE(*,'(//1X,6(7X,A)/)')'X^0','X^1','X^2','X^3','X^4','X^5'
+	WRITE(*,*) 'Quotient polynomial coefficients:'
+	WRITE(*,'(1X,6F10.2/)') (Q(I),I=1,6)
+	WRITE(*,*) 'Expected quotient coefficients:'
+	WRITE(*,'(1X,6F10.2///)') 31.0,-8.0,1.0,0.0,0.0,0.0
+	WRITE(*,*) 'Remainder polynomial coefficients:'
+	WRITE(*,'(1X,4F10.2/)') (R(I),I=1,4)
+	WRITE(*,*) 'Expected remainder coefficients:'
+	WRITE(*,'(1X,4F10.2//)') -32.0,-80.0,-80.0,0.0
+	END

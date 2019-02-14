@@ -1,0 +1,28 @@
+	PROGRAM D2R6
+C	Driver for routine VANDER
+	PARAMETER(N=5)
+	DIMENSION X(N),Q(N),W(N),TERM(N)
+	DATA X/1.0,1.5,2.0,2.5,3.0/
+	DATA Q/1.0,1.5,2.0,2.5,3.0/
+	CALL VANDER(X,W,Q,N)
+	WRITE(*,*) 'Solution vector:'
+	DO 11 I=1,N
+		WRITE(*,'(5X,A2,I1,A4,E12.6)') 'W(',I,') = ',W(I)
+11	CONTINUE
+	WRITE(*,'(/1X,A)') 'Test of solution vector:'
+	WRITE(*,'(1X,T6,A,T19,A)') 'mtrx*sol''n','original'
+	SUM=0.0
+	DO 12 I=1,N
+		TERM(I)=W(I)
+		SUM=SUM+W(I)
+12	CONTINUE
+	WRITE(*,'(1X,2F12.4)') SUM,Q(1)
+	DO 14 I=2,N
+		SUM=0.0
+		DO 13 J=1,N
+			TERM(J)=TERM(J)*X(J)
+			SUM=SUM+TERM(J)
+13		CONTINUE
+		WRITE(*,'(1X,2F12.4)') SUM,Q(I)
+14	CONTINUE
+	END

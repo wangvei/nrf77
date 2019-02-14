@@ -1,0 +1,35 @@
+	PROGRAM D10R11
+C	Driver for routine DFPMIN
+	PARAMETER(NDIM=3,FTOL=1.0E-6,PIO2=1.5707963)
+	DIMENSION P(NDIM)
+	WRITE(*,'(/1X,A)') 'Program finds the minimum of a function'
+	WRITE(*,'(1X,A)') 'with different trial starting vectors.'
+	WRITE(*,'(1X,A)') 'True minimum is (0.5,0.5,0.5)'
+	DO 11 K=0,4
+		ANGL=PIO2*K/4.0
+		P(1)=2.0*COS(ANGL)
+		P(2)=2.0*SIN(ANGL)
+		P(3)=0.0
+		WRITE(*,'(/1X,A,3(F6.4,A))') 'Starting vector: (',
+     *			P(1),',',P(2),',',P(3),')'
+		CALL DFPMIN(P,NDIM,FTOL,ITER,FRET)
+		WRITE(*,'(1X,A,I3)') 'Iterations:',ITER
+		WRITE(*,'(1X,A,3(F6.4,A))') 'Solution vector: (',
+     *			P(1),',',P(2),',',P(3),')'
+		WRITE(*,'(1X,A,E14.6)') 'Func. value at solution',FRET
+11	CONTINUE
+	END
+
+	FUNCTION FUNC(X)
+	DIMENSION X(3)
+	FUNC=1.0-BESSJ0(X(1)-0.5)*BESSJ0(X(2)-0.5)*BESSJ0(X(3)-0.5)
+	END
+
+	SUBROUTINE DFUNC(X,DF)
+	PARAMETER (NMAX=50)
+	DIMENSION X(3),DF(NMAX)
+	DF(1)=BESSJ1(X(1)-0.5)*BESSJ0(X(2)-0.5)*BESSJ0(X(3)-0.5)
+	DF(2)=BESSJ0(X(1)-0.5)*BESSJ1(X(2)-0.5)*BESSJ0(X(3)-0.5)
+	DF(3)=BESSJ0(X(1)-0.5)*BESSJ0(X(2)-0.5)*BESSJ1(X(3)-0.5)
+	RETURN
+	END

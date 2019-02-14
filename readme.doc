@@ -1,0 +1,202 @@
+         NUMERICAL RECIPES EXAMPLE DISKETTE (FORTRAN) V1.0
+         --------- ------- ------- -------- --------- ----
+             The entire contents of this diskette are
+         Copyright (C) 1985 by Numerical Recipes Software
+                 P.O. Box 243, Cambridge, MA  02238
+         Unauthorized reproduction is strictly prohibited.
+
+Please read this document completely before attempting to use the
+NUMERICAL RECIPES EXAMPLE DISKETTE.  Your use of any programs on this
+diskette constitutes acceptance of the terms of the DISCLAIMER OF WARRANTY,
+which is given in full at the end of this document.
+
+WHAT IS THIS DISKETTE?
+     This diskette contains machine-readable FORTRAN source programs that
+exercise and demonstrate the FORTRAN subroutines from the book "Numerical
+Recipes: The Art of Scientific Computing" published by Cambridge University
+Press (1985).  Thus, to use this diskette effectively, you will also need
+     -- the book "Numerical Recipes: The Art of Scientific Computing"
+     -- the NUMERICAL RECIPES FORTRAN DISKETTE containing the book's
+          subroutines in machine-readable form.
+It is helpful, but not required, for you to have also
+     -- the "Numerical Recipes Example Book (FORTRAN)"
+which is a printed listing of the Fortran programs on this diskette, along
+with a short introductory explanation of each program.  Details on how to
+order these and other items are given at the end of this document.
+
+WHAT PROGRAMS ARE ON THIS DISKETTE?
+     There are 189 FORTRAN programs on this diskette, with names
+corresponding to the NUMERICAL RECIPES subroutines that they exercise, and
+with file extensions .DEM; for example, the NUMERICAL RECIPES subroutine
+JACOBI is exercised by the program JACOBI.DEM.  Also on this diskette are
+10 data files, which are used by some of the demonstration programs.  These
+all have extensions .DAT.  A complete list of the programs on this
+diskette is in the file NAMES.DOC, which you can type or print out.
+     Note, as mentioned above, that the NUMERICAL RECIPES subroutines to be
+exercised are not on this diskette.  They are listed in "Numerical Recipes:
+The Art of Scientific Computing" and distributed in machine-readable form
+as the NUMERICAL RECIPES FORTRAN DISKETTE. 
+
+WHAT VERSION OF FORTRAN IS USED?
+     The programs on this diskette are in that subset of ANSI standard
+FORTRAN-77 that is implemented by Microsoft Corporation in Microsoft
+FORTRAN, version 3.20.  No incompatibilities with the full FORTRAN-77
+standard have been introduced, so the program versions on this diskette
+should also run on any full implementation of the FORTRAN-77 standard.  For
+compilers that deviate from the standard, minor modifications in the
+programs are required.
+
+HOW DO YOU ACCESS THE PROGRAMS?
+     This diskette has two "hidden" subdirectories.  The subdirectory
+\DEMOS contains the 189 programs, all with names of the format *.DEM, while
+the subdirectory \DATA contains the ten data files.  For example, if this
+diskette is in drive A:, you can copy the program BCUCOF.DEM to your
+working directory by the command
+COPY A:\DEMOS\BCUCOF.DEM <enter>
+where <enter> denotes the enter or return key.  If you want to copy all the
+program files, e.g. to a hard disk, you can do this by the two commands
+COPY A:\DEMOS\*.*
+COPY A:\DATA\*.*
+This will take some time, since the number of files is large.  Also note
+that most hard disks have a minimum file block size of 4096 bytes.  Since
+most of the files are much shorter than that, the programs on this diskette
+will occupy substantially more space on a hard disk.  We recommend that you
+create a backup copy of this diskette using the DISKCOPY command, then copy
+individual programs to your working directory only as you need them.
+
+HOW DO YOU USE THE PROGRAMS?
+     The purpose of the .DEM programs is pedagogical, to furnish you with a
+demonstration example of the use of each NUMERICAL RECIPES subroutine. 
+Often, you will only need to read the .DEM program file (in conjunction
+with "Numerical Recipes: The Art of Scientific Computing") to get a clear
+idea of how to proceed with your own application.  Sometimes, however, it
+is useful to carry the demonstration through compilation, linking,
+execution, and even some experimental tinkering with the demonstration
+program.  In that way you develop confidence in your understanding of the
+underlying numerical procedure.  
+     Here is an example of this procedure, for the NUMERICAL RECIPE
+subroutine AMOEBA.  We assume that you are using the Microsoft FORTRAN
+compiler (for another compiler consult your documentation).  DOS commands
+that you enter are given in upper case; you do not enter the bracketed,
+lower-case comments.  Your working directory is assumed to be disk drive B,
+with DOS prompt B>
+     [put this diskette in drive A]
+B> COPY A:\DEMOS\AMOEBA.DEM     [copy the program to working directory]
+     [put NUMERICAL RECIPES FORTRAN DISKETTE in drive A]
+B> COPY A:\RECIPES\AMOEBA.FOR   [copy the subroutine to working directory]
+B> COPY A:\RECIPES\BESSJ0.FOR   [also used by AMOEBA.DEM]
+B> FOR1 AMOEBA.DEM,AMOEBA.DBJ;  [compile the program]
+B> PAS2                         [second pass of compiler]
+B> FOR1 AMOEBA.FOR;             [compile subroutine]
+B> PAS2                         [second pass]
+B> FOR1 BESSJ0.FOR;             [compile subroutine]
+B> PAS2                         [second pass]
+B> LINK AMOEBA.DBJ+AMOEBA+BESSJ0,;      [link all required programs]
+B> AMOEBA                       [run the demonstration program]
+     If the demonstration program required a data file, you would have
+copied it to your working directory from A:\DATA as the very first step. 
+You find out what subroutines and data files are needed by a .DEM program
+by reading its program listing on this diskette, or by consulting the
+"Numerical Recipes Example Book (FORTRAN)."
+
+WHAT DO YOU DO IF YOU NEED HELP?
+     If you believe that this diskette is defective in manufacture, return
+it to the place of purchase for replacement, or contact Cambridge
+University Press at the address given below.
+     For technical questions or assistance, write to Numerical Recipes
+Software, P.O. Box 243, Cambridge, MA  02238.  Please note, however, that
+the programs on this diskette are sold "as is" (see DISCLAIMER OF WARRANTY
+below).  The authors of NUMERICAL RECIPES are interested in receiving
+reports of bugs, but they cannot guarantee to correct them on any fixed
+schedule.  User satisfaction is important to authors and publisher,
+however, so you should not hesitate to make your comments or problems
+known.
+
+RELATED PRODUCTS AND HOW TO ORDER THEM:
+
+Published by Cambridge University Press:
+
+     "Numerical Recipes: The Art of Scientific Computing"
+     by William H. Press, Brian P. Flannery, Saul A. Teukolsky,
+     and William T. Vetterling
+          (textbook and reference containing all explanations
+          of PASCAL procedures and FORTRAN subroutines)
+
+     "Numerical Recipes Example Book (FORTRAN)" by William T. Vetterling,
+     Saul A. Teukolsky, William H. Press, and Brian P. Flannery
+          (sample program listings in the FORTRAN language
+          demonstrating the use of each NUMERICAL RECIPES subroutine)
+
+     "Numerical Recipes Example Book (Pascal)" by William T. Vetterling,
+     Saul A. Teukolsky, William H. Press, and Brian P. Flannery
+          (sample program listings in the Pascal language
+          demonstrating the use of each NUMERICAL RECIPES procedure)
+
+To order the above items, write or call Cambridge University Press, 510
+North Avenue, New Rochelle, New York 10801, Tel. (800) 431-1580 (outside of
+Canada and New York), (914) 235-0300 (in Canada and New York); or contact
+your local bookstore.
+
+Also published by Cambridge University Press:
+
+     NUMERICAL RECIPES FORTRAN DISKETTE
+          (FORTRAN subroutines as listed in "Numerical Recipes: The Art
+          of Scientific Computing" in machine-readable form)
+
+     NUMERICAL RECIPES EXAMPLE DISKETTE (FORTRAN)  --this diskette--
+          (demonstration programs in the FORTRAN language as listed in
+          "Numerical Recipes Example Book (FORTRAN)" in machine-readable
+          form)
+
+     NUMERICAL RECIPES PASCAL DISKETTE
+          (Pascal procedures as listed in "Numerical Recipes: The Art
+          of Scientific Computing" in machine-readable form)
+
+     NUMERICAL RECIPES EXAMPLE DISKETTE (PASCAL)
+          (demonstration programs in the Pascal language as listed in
+          "Numerical Recipes Example Book (Pascal)" in machine-readable
+          form)
+
+To order the above items, write or call Cambridge University Press, 510
+North Avenue, New Rochelle, New York 10801, Tel. (800) 431-1580 (outside of
+Canada and New York), (914) 235-0300 (in Canada and New York); or write
+Numerical Recipes Software, P.O. Box 243, Cambridge, MA 02238.
+
+Published by Numerical Recipes Software:
+
+     NUMERICAL RECIPES OBJECT FILE DISKETTE (FORTRAN)
+          (FORTRAN subroutines from "Numerical Recipes: The Art
+          of Scientific Computing" as .OBJ files)
+
+     NUMERICAL RECIPES VAX INSTALLATION MAGNETIC TAPE (FORTRAN)
+          (FORTRAN subroutines from "Numerical Recipes: The Art
+          of Scientific Computing" for multiuser installation
+          on DEC VAX)
+
+     NUMERICAL RECIPES UCSD p-SYSTEM DISKETTE (UCSD PASCAL)
+          (PASCAL procedures from "Numerical Recipes: The Art
+          of Scientific Computing" for IBM/PCs using the UCSD
+          p-system operating system)
+
+     NUMERICAL RECIPES MACINTOSH DISKETTE (PASCAL)
+          (PASCAL procedures from "Numerical Recipes: The Art
+          of Scientific Computing" for Apple MacIntosh)
+
+To order the above items, write Numerical Recipes Software, P.O. Box 243,
+Cambridge, MA 02238.
+
+                       DISCLAIMER OF WARRANTY
+                       ---------- -- --------
+     THE PROGRAMS AND PROCEDURES ON THIS DISKETTE ARE PROVIDED "AS IS"
+WITHOUT WARRANTY OF ANY KIND.  WE MAKE NO WARRANTIES, EXPRESS OR IMPLIED,
+THAT THE PROGRAMS AND PROCEDURES ARE FREE OF ERROR, OR ARE CONSISTENT WITH
+ANY PARTICULAR STANDARD OF MERCHANTABILITY, OR THAT THEY WILL MEET YOUR
+REQUIREMENTS FOR ANY PARTICULAR APPLICATION.  THEY SHOULD NOT BE RELIED ON
+FOR SOLVING A PROBLEM WHOSE INCORRECT SOLUTION COULD RESULT IN INJURY TO A
+PERSON OR LOSS OF PROPERTY.  IF YOU DO USE THE PROGRAMS OR PROCEDURES IN
+SUCH A MANNER, IT IS AT YOUR OWN RISK.  THE AUTHORS AND PUBLISHER DISCLAIM
+ALL LIABILITY FOR DIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES RESULTING
+FROM YOUR USE OF THE PROGRAMS OR PROCEDURES ON THIS DISKETTE.  ANY
+LIABILITY OF SELLER OR MANUFACTURER WILL BE LIMITED EXCLUSIVELY TO PRODUCT
+REPLACEMENT OF DISKETTES WITH MANUFACTURING DEFECTS.
+

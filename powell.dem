@@ -1,0 +1,19 @@
+	PROGRAM D10R6
+C	Driver for routine POWELL
+	PARAMETER(NDIM=3,FTOL=1.0E-6)
+	DIMENSION P(NDIM),XI(NDIM,NDIM)
+	NP=NDIM
+	DATA XI/1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0/
+	DATA P/1.5,1.5,2.5/
+	CALL POWELL(P,XI,NDIM,NP,FTOL,ITER,FRET)
+	WRITE(*,'(/1X,A,I3)') 'Iterations:',ITER
+	WRITE(*,'(/1X,A/1X,3F12.6)') 'Minimum found at: ',(P(I),I=1,NDIM)
+	WRITE(*,'(/1X,A,F12.6)') 'Minimum function value =',FRET
+	WRITE(*,'(/1X,A)') 'True minimum of function is at:'
+	WRITE(*,'(1X,3F12.6/)') 1.0,2.0,3.0
+	END
+
+	FUNCTION FUNC(X)
+	DIMENSION X(3)
+	FUNC=0.5-BESSJ0((X(1)-1.0)**2+(X(2)-2.0)**2+(X(3)-3.0)**2)
+	END

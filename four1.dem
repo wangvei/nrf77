@@ -1,0 +1,81 @@
+	PROGRAM D12R1
+C	Driver for routine FOUR1
+	PARAMETER (NN=32,NN2=2*NN)
+	DIMENSION DATA(NN2),DCMP(NN2)
+	WRITE(*,*) 'h(t)=real-valued even-function'
+	WRITE(*,*) 'H(n)=H(N-n) and real?'
+	DO 11 I=1,2*NN-1,2
+		DATA(I)=1.0/(((I-NN-1.0)/NN)**2+1.0)
+		DATA(I+1)=0.0
+11	CONTINUE
+	ISIGN=1
+	CALL FOUR1(DATA,NN,ISIGN)
+	CALL PRNTFT(DATA,NN2)
+	WRITE(*,*) 'h(t)=imaginary-valued even-function'
+	WRITE(*,*) 'H(n)=H(N-n) and imaginary?'
+	DO 12 I=1,2*NN-1,2
+		DATA(I+1)=1.0/(((I-NN-1.0)/NN)**2+1.0)
+		DATA(I)=0.0
+12	CONTINUE
+	ISIGN=1
+	CALL FOUR1(DATA,NN,ISIGN)
+	CALL PRNTFT(DATA,NN2)
+	WRITE(*,*) 'h(t)=real-valued odd-function'
+	WRITE(*,*) 'H(n)=-H(N-n) and imaginary?'
+	DO 13 I=1,2*NN-1,2
+		DATA(I)=(I-NN-1.0)/NN/(((I-NN-1.0)/NN)**2+1.0)
+		DATA(I+1)=0.0
+13	CONTINUE
+	DATA(1)=0.0
+	ISIGN=1
+	CALL FOUR1(DATA,NN,ISIGN)
+	CALL PRNTFT(DATA,NN2)
+	WRITE(*,*) 'h(t)=imaginary-valued odd-function'
+	WRITE(*,*) 'H(n)=-H(N-n) and real?'
+	DO 14 I=1,2*NN-1,2
+		DATA(I+1)=(I-NN-1.0)/NN/(((I-NN-1.0)/NN)**2+1.0)
+		DATA(I)=0.0
+14	CONTINUE
+	DATA(2)=0.0
+	ISIGN=1
+	CALL FOUR1(DATA,NN,ISIGN)
+	CALL PRNTFT(DATA,NN2)
+C	Transform, inverse-transform test
+	DO 15 I=1,2*NN-1,2
+		DATA(I)=1.0/((0.5*(I-NN-1)/NN)**2+1.0)
+		DCMP(I)=DATA(I)
+		DATA(I+1)=(0.25*(I-NN-1)/NN)*
+     *			EXP(-(0.5*(I-NN-1.0)/NN)**2)
+		DCMP(I+1)=DATA(I+1)
+15	CONTINUE
+	ISIGN=1
+	CALL FOUR1(DATA,NN,ISIGN)
+	ISIGN=-1
+	CALL FOUR1(DATA,NN,ISIGN)
+	WRITE(*,'(/1X,T10,A,T44,A)') 'Double Fourier Transform:',
+     *		'Original Data:'
+	WRITE(*,'(/1X,T5,A,T11,A,T24,A,T41,A,T53,A/)')
+     *		'k','Real h(k)','Imag h(k)','Real h(k)','Imag h(k)'
+	DO 16 I=1,NN,2
+		J=(I+1)/2
+		WRITE(*,'(1X,I4,2X,2F12.6,5X,2F12.6)') J,DCMP(I),
+     *			DCMP(I+1),DATA(I)/NN,DATA(I+1)/NN
+16	CONTINUE
+	END
+
+	SUBROUTINE PRNTFT(DATA,NN2)
+	DIMENSION DATA(NN2)
+	WRITE(*,'(/1X,T5,A,T11,A,T23,A,T39,A,T52,A)')
+     *		'n','Real H(n)','Imag H(n)','Real H(N-n)','Imag H(N-n)'
+	WRITE(*,'(1X,I4,2X,2F12.6,5X,2F12.6)') 0,DATA(1),DATA(2),
+     *		DATA(1),DATA(2)
+	DO 11 N=3,(NN2/2)+1,2
+		M=(N-1)/2
+		MM=NN2+2-N
+		WRITE(*,'(1X,I4,2X,2F12.6,5X,2F12.6)') M,DATA(N),
+     *			DATA(N+1),DATA(MM),DATA(MM+1)
+11	CONTINUE
+	WRITE(*,'(/1X,A)') ' press RETURN to continue ...'
+	READ(*,*)
+	RETURN
+	END

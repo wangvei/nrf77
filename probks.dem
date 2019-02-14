@@ -1,0 +1,23 @@
+	PROGRAM D13R12
+C	Driver for routine PROBKS
+	CHARACTER TEXT(50)*1
+	WRITE(*,*) 'Probability func. for Kolmogorov-Smirnov statistic'
+	WRITE(*,'(/1X,T3,A,T15,A,T27,A)') 'Lambda:','Value:','Graph:'
+	NPTS=20
+	EPS=0.1
+	SCALE=40.0
+	DO 12 I=1,NPTS
+		ALAM=I*EPS
+		VALUE=PROBKS(ALAM)
+		TEXT(1)='*'
+		DO 11 J=1,50
+			IF(J.LE.NINT(SCALE*VALUE)) THEN
+				TEXT(J)='*'
+			ELSE
+				TEXT(J)=' '
+			ENDIF
+11		CONTINUE
+		WRITE(*,'(1X,F9.6,F12.6,4X,50A1)') ALAM,VALUE,
+     *			(TEXT(J),J=1,50)
+12	CONTINUE
+	END

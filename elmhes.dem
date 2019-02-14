@@ -1,0 +1,27 @@
+	PROGRAM D11R6
+C	Driver for ELMHES
+	PARAMETER(NP=5)
+	DIMENSION A(NP,NP),R(NP),C(NP)
+	DATA A/1.0,2.0,3.0,4.0,5.0,2.0,3.0,4.0,5.0,6.0,
+     *		300.0,400.0,5.0,600.0,700.0,4.0,5.0,6.0,7.0,8.0,
+     *		5.0,6.0,7.0,8.0,9.0/
+	WRITE(*,'(/1X,A/)') '***** Original Matrix *****'
+	DO 11 I=1,NP
+		WRITE(*,'(1X,5F12.2)') (A(I,J),J=1,NP)
+11	CONTINUE
+	WRITE(*,'(/1X,A/)') '***** Balance Matrix *****'
+	CALL BALANC(A,NP,NP)
+	DO 12 I=1,NP
+		WRITE(*,'(1X,5F12.2)') (A(I,J),J=1,NP)
+12	CONTINUE
+	WRITE(*,'(/1X,A/)') '***** Reduce to Hessenberg Form *****'
+	CALL ELMHES(A,NP,NP)
+	DO 14 J=1,NP-2
+		DO 13 I=J+2,NP
+			A(I,J)=0.0
+13		CONTINUE
+14	CONTINUE
+	DO 15 I=1,NP
+		WRITE(*,'(1X,5E12.4)') (A(I,J),J=1,NP)
+15	CONTINUE
+	END

@@ -1,0 +1,29 @@
+	PROGRAM D2R5
+C	Driver for routine MPROVE
+	PARAMETER(N=5,NP=5)
+	DIMENSION A(NP,NP),INDX(N),B(N),X(N),AA(NP,NP)
+	DATA A/1.0,2.0,1.0,4.0,5.0,2.0,3.0,1.0,5.0,1.0,
+     *		3.0,4.0,1.0,1.0,2.0,4.0,5.0,1.0,2.0,3.0,
+     *		5.0,1.0,1.0,3.0,4.0/
+	DATA B/1.0,1.0,1.0,1.0,1.0/
+	DO 12 I=1,N
+		X(I)=B(I)
+		DO 11 J=1,N
+			AA(I,J)=A(I,J)
+11		CONTINUE
+12	CONTINUE
+	CALL LUDCMP(AA,N,NP,INDX,D)
+	CALL LUBKSB(AA,N,NP,INDX,X)
+	WRITE(*,'(/1X,A)') 'Solution vector for the equations:'
+	WRITE(*,'(1X,5F12.6)') (X(I),I=1,N)
+C	Now phoney up X and let MPROVE fit it
+	IDUM=-13
+	DO 13 I=1,N
+		X(I)=X(I)*(1.0+0.2*RAN3(IDUM))
+13	CONTINUE
+	WRITE(*,'(/1X,A)') 'Solution vector with noise added:'
+	WRITE(*,'(1X,5F12.6)') (X(I),I=1,N)
+	CALL MPROVE(A,AA,N,NP,INDX,B,X)
+	WRITE(*,'(/1X,A)') 'Solution vector recovered by MPROVE:'
+	WRITE(*,'(1X,5F12.6)') (X(I),I=1,N)
+	END

@@ -1,0 +1,15 @@
+	PROGRAM D9R3
+C	Driver for routine ZBRAK
+	EXTERNAL BESSJ0
+	PARAMETER(N=100,NBMAX=20,X1=1.0,X2=50.0)
+	DIMENSION XB1(NBMAX),XB2(NBMAX)
+	NB=NBMAX
+	CALL ZBRAK(BESSJ0,X1,X2,N,XB1,XB2,NB)
+	WRITE(*,'(/1X,A/)') 'Brackets for roots of BESSJ0:'
+	WRITE(*,'(/1X,T17,A,T27,A,T40,A,T50,A/)') 'lower','upper',
+     *			'F(lower)','F(upper)'
+	DO 11 I=1,NB
+		WRITE(*,'(1X,A,I2,2(4X,2F10.4))') 'Root ',I,XB1(I),XB2(I),
+     *			BESSJ0(XB1(I)),BESSJ0(XB2(I))
+11	CONTINUE
+	END

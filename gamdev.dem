@@ -1,0 +1,35 @@
+	PROGRAM D7R7
+C	Driver for routine GAMDEV
+	PARAMETER(N=20,NPTS=10000,ISCAL=200,LLEN=50)
+	DIMENSION DIST(21)
+	CHARACTER TEXT(50)*1
+	IDUM=-13
+10	DO 11 J=1,21
+		DIST(J)=0.0
+11	CONTINUE
+	WRITE(*,*) 'Order of Gamma distribution (n=1..20); -1 to end.'
+	READ(*,*) IA
+	IF (IA.LE.0) GOTO 99
+	IF (IA.GT.20) GOTO 10		
+	DO 12 I=1,NPTS
+		J=INT(GAMDEV(IA,IDUM))+1
+		IF ((J.GE.1).AND.(J.LE.21)) DIST(J)=DIST(J)+1
+12	CONTINUE
+	WRITE(*,'(1X,A,I2,A,I6,A)') 'Gamma-distribution deviate, order ',
+     *		IA,' of ',NPTS,' points'
+	WRITE(*,'(1X,T6,A,T14,A,T23,A)') 'x','p(x)','graph:'
+	DO 15 J=1,20
+		DIST(J)=DIST(J)/NPTS
+		DO 13 K=1,50
+			TEXT(K)=' '
+13		CONTINUE
+		KLIM=INT(ISCAL*DIST(J))
+		IF (KLIM.GT.LLEN) KLIM=LLEN
+		DO 14 K=1,KLIM
+			TEXT(K)='*'
+14		CONTINUE
+		WRITE(*,'(1X,F7.2,F10.4,4X,50A1)')
+     *			FLOAT(J),DIST(J),(TEXT(K),K=1,50)
+15	CONTINUE
+	GOTO 10
+99	END

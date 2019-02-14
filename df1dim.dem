@@ -1,0 +1,26 @@
+	PROGRAM D10R10
+C	Driver for routine DF1DIM
+	PARAMETER(NDIM=3,NMAX=50)
+	EXTERNAL DF1DIM
+	COMMON /F1COM/ NCOM,PCOM(NMAX),XICOM(NMAX)
+	DIMENSION P(NDIM),XI(NDIM)
+	DATA P/0.0,0.0,0.0/
+	NCOM=NDIM
+	WRITE(*,'(/1X,A)') 'Enter vector direction along which to'
+	WRITE(*,'(1X,A)') 'plot the function. Minimum is in the'
+	WRITE(*,'(1X,A)') 'direction 1.0,1.0,1.0 - Enter X,Y,Z:'
+	READ (*,*) (XI(I),I=1,3)
+	DO 11 J=1,NDIM
+		PCOM(J)=P(J)
+		XICOM(J)=XI(J)
+11	CONTINUE
+	CALL SCRSHO(DF1DIM)
+	END
+
+	SUBROUTINE DFUNC(X,DF)
+	DIMENSION X(3),DF(3)
+	DO 11 I=1,3
+		DF(I)=(X(I)-1.0)**2
+11	CONTINUE
+	RETURN
+	END

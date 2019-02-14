@@ -1,0 +1,22 @@
+	PROGRAM D3R10
+C	Driver for routine BCUCOF
+	DIMENSION C(4,4),Y(4),Y1(4),Y2(4)
+	DIMENSION Y12(4),X1(4),X2(4)
+	DATA X1/0.0,2.0,2.0,0.0/
+	DATA X2/0.0,0.0,2.0,2.0/
+	D1=X1(2)-X1(1)
+	D2=X2(4)-X2(1)
+	DO 11 I=1,4
+		X1X2=X1(I)*X2(I)
+		EE=EXP(-X1X2)
+		Y(I)=X1X2*EE
+		Y1(I)=X2(I)*(1.0-X1X2)*EE
+		Y2(I)=X1(I)*(1.0-X1X2)*EE
+		Y12(I)=(1.0-3.0*X1X2+X1X2**2)*EE
+11	CONTINUE
+	CALL BCUCOF(Y,Y1,Y2,Y12,D1,D2,C)
+	WRITE(*,*) 'Coefficients for bicubic interpolation'
+	DO 12 I=1,4
+		WRITE(*,'(1X,4e15.6)') (C(I,J),J=1,4)
+12	CONTINUE
+	END

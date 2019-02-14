@@ -1,0 +1,99 @@
+	PROGRAM D4R6
+C	Driver for QROMO
+	PARAMETER(X1=0.0,X2=1.5707963,X3=3.1415926,AINF=1.0E20)
+	EXTERNAL FUNCL,MIDSQL,FUNCU,MIDSQU,FNCINF,MIDINF,FNCEND
+	WRITE(*,'(/1X,A)') 'Improper integrals:'
+	CALL QROMO(FUNCL,X1,X2,RESULT,MIDSQL)
+	WRITE(*,'(/1X,A)')
+     *		'Function: SQRT(x)/SIN(x)       Interval: (0,pi/2)'
+	WRITE(*,'(1X,A,F8.4)')
+     *		'Using: MIDSQL                  Result:',RESULT
+	CALL QROMO(FUNCU,X2,X3,RESULT,MIDSQU)
+	WRITE(*,'(/1X,A)')
+     *		'Function: SQRT(pi-x)/SIN(x)    Interval: (pi/2,pi)'
+	WRITE(*,'(1X,A,F8.4)')
+     *		'Using: MIDSQU                  Result:',RESULT
+	CALL QROMO(FNCINF,X2,AINF,RESULT,MIDINF)
+	WRITE(*,'(/1X,A)')
+     *		'Function: SIN(x)/x**2          Interval: (pi/2,infty)'
+	WRITE(*,'(1X,A,F8.4)')
+     *		'Using: MIDINF                  Result:',RESULT
+	CALL QROMO(FNCINF,-AINF,-X2,RESULT,MIDINF)
+	WRITE(*,'(/1X,A)')
+     *		'Function: SIN(x)/x**2          Interval: (-infty,-pi/2)'
+	WRITE(*,'(1X,A,F8.4)')
+     *		'Using: MIDINF                  Result:',RESULT
+	CALL QROMO(FNCEND,X1,X2,RES1,MIDSQL)
+	CALL QROMO(FNCEND,X2,AINF,RES2,MIDINF)
+	WRITE(*,'(/1X,A)')
+     *		'Function: EXP(-x)/SQRT(x)      Interval: (0.0,infty)'
+	WRITE(*,'(1X,A,F8.4/)')
+     *		'Using: MIDSQL,MIDINF           Result:',RES1+RES2
+	END
+
+	SUBROUTINE MIDSQL(FUNK,AA,BB,S,N)
+	FUNC(X)=2.*X*FUNK(AA+X**2)
+	B=SQRT(BB-AA)
+	A=0.0
+	IF (N.EQ.1) THEN
+		S=(B-A)*FUNC(0.5*(A+B))
+		IT=1
+	ELSE
+		TNM=IT
+		DEL=(B-A)/(3.*TNM)
+		DDEL=DEL+DEL
+		X=A+0.5*DEL
+		SUM=0.
+		DO 11 J=1,IT
+			SUM=SUM+FUNC(X)
+			X=X+DDEL
+			SUM=SUM+FUNC(X)
+			X=X+DEL
+11		CONTINUE
+		S=(S+(B-A)*SUM/TNM)/3.
+		IT=3*IT
+	ENDIF
+	RETURN
+	END
+
+	SUBROUTINE MIDSQU(FUNK,AA,BB,S,N)
+	FUNC(X)=2.0*X*FUNK(BB-X**2)
+	B=SQRT(BB-AA)
+	A=0.0
+	IF (N.EQ.1) THEN
+		S=(B-A)*FUNC(0.5*(A+B))
+		IT=1
+	ELSE
+		TNM=IT
+		DEL=(B-A)/(3.*TNM)
+		DDEL=DEL+DEL
+		X=A+0.5*DEL
+		SUM=0.
+		DO 11 J=1,IT
+			SUM=SUM+FUNC(X)
+			X=X+DDEL
+			SUM=SUM+FUNC(X)
+			X=X+DEL
+11		CONTINUE
+		S=(S+(B-A)*SUM/TNM)/3.
+		IT=3*IT
+	ENDIF
+	RETURN
+	END
+
+	FUNCTION FUNCL(X)
+	FUNCL=SQRT(X)/SIN(X)
+	END
+
+	FUNCTION FUNCU(X)
+	PARAMETER(PI=3.1415926)
+	FUNCU=SQRT(PI-X)/SIN(X)
+	END
+
+	FUNCTION FNCINF(X)
+	FNCINF=SIN(X)/(X**2)
+	END
+
+	FUNCTION FNCEND(X)
+	FNCEND=EXP(-X)/SQRT(X)
+	END

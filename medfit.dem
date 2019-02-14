@@ -1,0 +1,27 @@
+	PROGRAM D14R10
+C	Driver for routine MEDFIT
+	PARAMETER(NPT=100,SPREAD=0.1)
+	DIMENSION X(NPT),Y(NPT),SIG(NPT)
+	IDUM=-1984
+	DO 11 I=1,NPT
+		X(I)=0.1*I
+		Y(I)=-2.0*X(I)+1.0+SPREAD*GASDEV(IDUM)
+		SIG(I)=SPREAD
+11	CONTINUE
+	MWT=1
+	CALL FIT(X,Y,NPT,SIG,MWT,A,B,SIGA,SIGB,CHI2,Q)
+	WRITE(*,'(/1X,A)') 'According to routine FIT the result is:'
+	WRITE(*,'(1X,T5,A,F8.4,T20,A,F8.4)') 'A = ',A,'Uncertainty: ',
+     *		SIGA
+	WRITE(*,'(1X,T5,A,F8.4,T20,A,F8.4)') 'B = ',B,'Uncertainty: ',
+     *		SIGB
+	WRITE(*,'(1X,T5,A,F8.4,A,I4,A)') 'Chi-squared: ',CHI2,
+     *		' for ',NPT,' points'
+	WRITE(*,'(1X,T5,A,F8.4)') 'Goodness-of-fit: ',Q
+	WRITE(*,'(/1X,A)') 'According to routine MEDFIT the result is:'
+	CALL MEDFIT(X,Y,NPT,A,B,ABDEV)
+	WRITE(*,'(1X,T5,A,F8.4)') 'A = ',A
+	WRITE(*,'(1X,T5,A,F8.4)') 'B = ',B
+	WRITE(*,'(1X,T5,A,F8.4)') 'Absolute deviation (per data point): ',ABDEV
+	WRITE(*,'(1X,T5,A,F8.4,A)') '(note: Gaussian spread is',SPREAD,')'
+	END

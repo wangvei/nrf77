@@ -1,0 +1,53 @@
+	PROGRAM D14R8B
+C	Driver for routine MRQCOF
+	EXTERNAL FGAUSS
+	PARAMETER(NPT=100,MA=6,SPREAD=0.1)
+	DIMENSION X(NPT),Y(NPT),SIG(NPT),A(MA),LISTA(MA),
+     *		COVAR(MA,MA),ALPHA(MA,MA),BETA(MA),GUES(MA)
+	DATA A/5.0,2.0,3.0,2.0,5.0,3.0/
+	DATA GUES/4.9,2.1,2.9,2.1,4.9,3.1/
+	IDUM=-911
+C	First try sum of two gaussians
+	DO 12 I=1,100
+		X(I)=0.1*I
+		Y(I)=0.0
+		DO 11 J=1,4,3
+			Y(I)=Y(I)+A(J)*EXP(-((X(I)-A(J+1))/A(J+2))**2)
+11		CONTINUE
+		Y(I)=Y(I)*(1.0+SPREAD*GASDEV(IDUM))
+		SIG(I)=SPREAD*Y(I)
+12	CONTINUE
+	MFIT=MA
+	DO 13 I=1,MFIT
+		LISTA(I)=I
+13	CONTINUE
+	DO 14 I=1,MA
+		A(I)=GUES(I)
+14	CONTINUE
+	CALL MRQCOF(X,Y,SIG,NPT,A,MA,LISTA,MFIT,ALPHA,
+     *		BETA,MA,CHISQ,FGAUSS)
+	WRITE(*,'(/1X,A)') 'matrix alpha'
+	DO 15 I=1,MA
+		WRITE(*,'(1X,6F12.4)') (ALPHA(I,J),J=1,MA)
+15	CONTINUE
+	WRITE(*,'(1X,A)') 'vector beta'
+	WRITE(*,'(1X,6F12.4)') (BETA(I),I=1,MA)
+	WRITE(*,'(1X,A,F12.4/)') 'Chi-squared:',CHISQ
+C	Next fix one line and improve the other
+	DO 16 I=1,3
+		LISTA(I)=I+3
+16	CONTINUE
+	MFIT=3
+	DO 17 I=1,MA
+		A(I)=GUES(I)
+17	CONTINUE
+	CALL MRQCOF(X,Y,SIG,NPT,A,MA,LISTA,MFIT,
+     *		ALPHA,BETA,MA,CHISQ,FGAUSS)
+	WRITE(*,'(1X,A)') 'matrix alpha'
+	DO 18 I=1,MFIT
+		WRITE(*,'(1X,6F12.4)') (ALPHA(I,J),J=1,MFIT)
+18 	CONTINUE
+	WRITE(*,'(1X,A)') 'vector beta'
+	WRITE(*,'(1X,6F12.4)') (BETA(I),I=1,MFIT)
+	WRITE(*,'(1X,A,F12.4/)') 'Chi-squared:',CHISQ
+	END

@@ -1,0 +1,49 @@
+	PROGRAM D13R19
+C	Driver for routine KENDL2
+C	Look for 'ones-after-zeros' in IRBIT1 and IRBIT2 sequences
+	PARAMETER(NDAT=1000,IP=8,JP=8)
+	DIMENSION TAB(IP,JP)
+	CHARACTER TEXT(8)*3
+	DATA TEXT/'000','001','010','011','100','101','110','111'/
+	WRITE(*,*) 'Are ones followed by zeros and vice-versa?'
+	I=IP
+	J=JP
+	DO 17 IFUNC=1,2
+		ISEED=2468
+		WRITE(*,'(/1X,A,I1/)') 'Test of IRBIT',IFUNC
+		DO 12 K=1,I
+			DO 11 L=1,J
+				TAB(K,L)=0.0
+11			CONTINUE
+12		CONTINUE
+		DO 15 M=1,NDAT
+			K=1
+			DO 13 N=0,2
+				IF (IFUNC.EQ.1) THEN
+					K=K+IRBIT1(ISEED)*(2**N)
+				ELSE 
+					K=K+IRBIT2(ISEED)*(2**N)
+				ENDIF
+13  			CONTINUE
+			L=1
+			DO 14 N=0,2
+				IF (IFUNC.EQ.1) THEN	
+					L=L+IRBIT1(ISEED)*(2**N)
+				ELSE 
+					L=L+IRBIT2(ISEED)*(2**N)
+				ENDIF
+14			CONTINUE
+			TAB(K,L)=TAB(K,L)+1.0
+15		CONTINUE
+		CALL KENDL2(TAB,I,J,IP,JP,TAU,Z,PROB)
+		WRITE(*,'(4X,8A6/)') (TEXT(N),N=1,8)
+		DO 16 N=1,8
+			WRITE(*,'(1X,A,8I6)') TEXT(N),(NINT(TAB(N,M)),M=1,8)
+16		CONTINUE
+		WRITE(*,'(/7X,A,T24,A,T38,A)') 'Kendall Tau','Std. Dev.',
+     * 			'Probability'
+		WRITE(*,'(1X,3F15.6/)') TAU,Z,PROB
+		WRITE(*,*) 'Press RETURN to continue ...'
+		READ(*,*)
+17	CONTINUE
+	END

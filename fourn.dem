@@ -1,0 +1,37 @@
+	PROGRAM D12R13
+C	Driver for routine FOURN
+	PARAMETER(NDIM=3,NDAT=1024)
+	DIMENSION NN(NDIM),DATA(NDAT)
+	DO 11 I=1,NDIM
+		NN(I)=2*(2**I)
+11	CONTINUE
+	DO 14 I=1,NN(3)
+		DO 13 J=1,NN(2)
+			DO 12 K=1,NN(1)
+				L=K+(J-1)*NN(1)+(I-1)*NN(2)*NN(1)
+ 				LL=2*L-1
+				DATA(LL)=FLOAT(LL)
+				DATA(LL+1)=FLOAT(LL+1)
+12			CONTINUE
+13		CONTINUE
+14	CONTINUE
+	ISIGN=+1
+	CALL FOURN(DATA,NN,NDIM,ISIGN)
+	ISIGN=-1
+	WRITE(*,'(1X,A)') 'Double 3-dimensional Transform'
+	WRITE(*,'(/1X,T10,A,T35,A,T63,A)') 'Double Transf.',
+     *		'Original Data','Ratio'
+	WRITE(*,'(1X,T8,A,T20,A,T33,A,T45,A,T57,A,T69,A/)') 
+     *		'Real','Imag.','Real','Imag.','Real','Imag.'
+	CALL FOURN(DATA,NN,NDIM,ISIGN)
+	DO 15 I=1,4
+		J=2*I
+		K=2*J
+		L=K+(J-1)*NN(1)+(I-1)*NN(2)*NN(1)
+		LL=2*L-1
+		WRITE(*,'(1X,6F12.2)') DATA(LL),DATA(LL+1),FLOAT(LL),FLOAT(LL+1),
+     *			DATA(LL)/LL,DATA(LL+1)/(LL+1)
+15	CONTINUE
+	WRITE(*,'(/1X,A,I4)') 'The product of transform lengths is:',
+     *		NN(1)*NN(2)*NN(3)
+	END

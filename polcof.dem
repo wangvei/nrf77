@@ -1,0 +1,44 @@
+	PROGRAM D3R8
+C	Driver for routine POLCOF
+	PARAMETER(NP=5,PI=3.141593)
+	DIMENSION XA(NP),YA(NP),COEFF(NP)
+	DO 15 NFUNC=1,2
+		IF (NFUNC.EQ.1) THEN
+			WRITE(*,*) 'Sine function from 0 to PI'
+			DO 11 I=1,NP
+				XA(I)=I*PI/NP
+				YA(I)=SIN(XA(I))
+11			CONTINUE
+		ELSE IF (NFUNC.EQ.2) THEN
+			WRITE(*,*) 'Exponential function from 0 to 1'
+			DO 12 I=1,NP
+				XA(I)=1.0*I/NP
+				YA(I)=EXP(XA(I))
+12			CONTINUE
+		ELSE
+			STOP
+		ENDIF
+		CALL POLCOF(XA,YA,NP,COEFF)	
+		WRITE(*,*) '    coefficients'
+		WRITE(*,'(1X,6F12.6)') (COEFF(I),I=1,NP)
+		WRITE(*,'(1X,T10,A1,T20,A4,T29,A10)')
+     *			'x','f(x)','polynomial'
+		DO 14 I=1,10
+			IF (NFUNC.EQ.1) THEN
+				X=(-0.05+I/10.0)*PI
+				F=SIN(X)
+			ELSE IF (NFUNC.EQ.2) THEN
+				X=-0.05+I/10.0
+				F=EXP(X)
+			ENDIF
+			SUM=COEFF(NP)
+			DO 13 J=NP-1,1,-1
+				SUM=COEFF(J)+SUM*X
+13			CONTINUE
+			WRITE(*,'(1X,3F12.6)') X,F,SUM
+14		CONTINUE
+		WRITE(*,*) '***********************************'
+		WRITE(*,*) 'Press RETURN'
+		READ(*,*)
+15	CONTINUE
+	END

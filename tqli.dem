@@ -1,0 +1,43 @@
+	PROGRAM D11R4
+C	Driver for routine TQLI
+	PARAMETER(NP=10,TINY=1.0E-6)
+	DIMENSION A(NP,NP),C(NP,NP),D(NP),E(NP),F(NP)
+	DATA C/5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,-4.0,
+     *		4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,-3.0,
+     *		3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,-2.0,
+     *		2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,-1.0,
+     *		1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,0.0,
+     *		0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,1.0,
+     *		-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,2.0,
+     *		-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,3.0,
+     *		-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,4.0,
+     *		-4.0,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0/
+	DO 12 I=1,NP
+		DO 11 J=1,NP
+			A(I,J)=C(I,J)
+11		CONTINUE
+12	CONTINUE
+	CALL TRED2(A,NP,NP,D,E)
+	CALL TQLI(D,E,NP,NP,A)
+	WRITE(*,'(/1X,A)') 'Eigenvectors for a real symmetric matrix'
+	DO 16 I=1,NP
+		DO 14 J=1,NP
+			F(J)=0.0
+			DO 13 K=1,NP
+				F(J)=F(J)+C(J,K)*A(K,I)
+13			CONTINUE
+14		CONTINUE
+		WRITE(*,'(/1X,A,I3,A,F10.6)') 'Eigenvalue',I,' =',D(I)
+		WRITE(*,'(/1X,T7,A,T17,A,T31,A)') 'Vector','Mtrx*Vect.','Ratio'
+		DO 15 J=1,NP
+			IF (ABS(A(J,I)).LT.TINY) THEN
+				WRITE(*,'(1X,2F12.6,A12)') A(J,I),F(J),'div. by 0'
+			ELSE
+				WRITE(*,'(1X,2F12.6,E14.6)') A(J,I),F(J),
+     *					F(J)/A(J,I)
+			ENDIF
+15		CONTINUE
+		WRITE(*,'(/1X,A)') 'press ENTER to continue...'
+		READ(*,*)
+16	CONTINUE
+	END

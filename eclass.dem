@@ -1,0 +1,30 @@
+	PROGRAM D8R10
+C	Driver for routine ECLASS
+	PARAMETER(N=15,M=11)
+	DIMENSION LISTA(M),LISTB(M),NF(N),NFLAG(N),NSAV(N)
+	DATA LISTA/1,1,5,2,6,2,7,11,3,4,12/
+	DATA LISTB/5,9,13,6,10,14,3,7,15,8,4/
+	CALL ECLASS(NF,N,LISTA,LISTB,M)
+	DO 11 I=1,N
+		NFLAG(I)=1
+11	CONTINUE
+	WRITE(*,'(/1X,A)') 'Numbers from 1-15 divided according to'
+	WRITE(*,'(1X,A/)') 'their value modulo 4:'
+	LCLAS=0
+	DO 13 I=1,N
+		NCLASS=NF(I)
+		IF(NFLAG(NCLASS).NE.0) THEN
+			NFLAG(NCLASS)=0
+			LCLAS=LCLAS+1
+			K=0
+			DO 12 J=I,N
+				IF (NF(J).EQ.NF(I)) THEN
+					K=K+1
+					NSAV(K)=J
+				ENDIF
+12			CONTINUE
+			WRITE(*,'(1X,A,I2,A,3X,5I3)') 'Class',
+     *				LCLAS,':',(NSAV(J),J=1,K)
+		ENDIF
+13	CONTINUE
+	END
