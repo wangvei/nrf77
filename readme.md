@@ -88,13 +88,7 @@
 |  7.3  | [`bnldev`](bnldev.f) | binomial distributed random deviates |
 |  7.4  | [`irbit1`](irbit1.f) | random bit sequence |
 |  7.4  | [`irbit2`](irbit2.f) | random bit sequence |
-|  7.5  | [`psdes `](psdes.f)  | “pseudo-DES” hashing of 64 bits |
 |  7.5  | [`ran4  `](ran4.f)   | random deviates from DES-like hashing |
-|  7.7  | [`sobseq`](sobseq.f) | Sobol’s quasi-random sequence |
-|  7.8  | [`vegas `](vegas.f)  | adaptive multidimensionalMonte Carlo integration |
-|  7.8  | [`rebin `](rebin.f)  | sample rebinning used by vegas |
-|  7.8  | [`miser `](miser.f)  | recursive multidimensional Monte Carlo integration |
-|  7.8  | [`ranpt `](ranpt.f)  | get random point, used by miser |
 |  8.1  | [`piksrt`](piksrt.f) | sort an array by straight insertion |
 |  8.1  | [`piksr2`](piksr2.f) | sort two arrays by straight insertion |
 |  8.1  | [`shell `](shell.f)  | sort an array by Shell’s method |
