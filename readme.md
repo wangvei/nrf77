@@ -94,13 +94,9 @@
 |  8.1  | [`shell `](shell.f)  | sort an array by Shell’s method |
 |  8.2  | [`sort  `](sort.f)   | sort an array by quicksort method |
 |  8.2  | [`sort2 `](sort2.f)  | sort two arrays by quicksort method |
-|  8.3  | [`hpsort`](hpsort.f) | sort an array by heapsort method |
 |  8.4  | [`indexx`](indexx.f) | construct an index for an array |
 |  8.4  | [`sort3 `](sort3.f)  | sort, use an index to sort 3 or more arrays |
 |  8.4  | [`rank  `](rank.f)   | construct a rank table for an array |
-|  8.5  | [`select`](select.f) | find the Nth largest in an array |
-|  8.5  | [`selip `](selip.f)  | find the Nth largest, without altering an array |
-|  8.5  | [`hpsel `](hpsel.f)  | find M largest values, without altering an array |
 |  8.6  | [`eclass`](eclass.f) | determine equivalence classes from list |
 |  8.6  | [`eclazz`](eclazz.f) | determine equivalence classes from procedure |
 |  9.0  | [`scrsho`](scrsho.f) | graph a function to search for roots |
@@ -109,20 +105,13 @@
 |  9.1  | [`rtbis `](rtbis.f)  | find root of a function by bisection |
 |  9.2  | [`rtflsp`](rtflsp.f) | find root of a function by false-position |
 |  9.2  | [`rtsec `](rtsec.f)  | find root of a function by secant method |
-|  9.2  | [`zriddr`](zriddr.f) | find root of a function by Ridders’ method |
 |  9.3  | [`zbrent`](zbrent.f) | find root of a function by Brent’s method |
 |  9.4  | [`rtnewt`](rtnewt.f) | find root of a function by Newton-Raphson |
 |  9.4  | [`rtsafe`](rtsafe.f) | find root of a function by Newton-Raphson and bisection |
 |  9.5  | [`laguer`](laguer.f) | find a root of a polynomial by Laguerre’s method |
 |  9.5  | [`zroots`](zroots.f) | roots of a polynomial by Laguerre’s method with deflation |
-|  9.5  | [`zrhqr `](zrhqr.f)  | roots of a polynomial by eigenvalue methods |
 |  9.5  | [`qroot `](qroot.f)  | complex or double root of a polynomial, Bairstow |
 |  9.6  | [`mnewt `](mnewt.f)  | Newton’s method for systems of equations |
-|  9.7  | [`lnsrch`](lnsrch.f) | search along a line, used by newt |
-|  9.7  | [`newt  `](newt.f)   | globally convergent multi-dimensionalNewton’s method |
-|  9.7  | [`fdjac `](fdjac.f)  | finite-difference Jacobian, used by newt |
-|  9.7  | [`fmin  `](fmin.f)   | norm of a vector function, used by newt |
-|  9.7  | [`broydn`](broydn.f) | secant method for systems of equations |
 | 10.1  | [`mnbrak`](mnbrak.f) | bracket the minimum of a function |
 | 10.1  | [`golden`](golden.f) | find minimum of a function by golden section search |
 | 10.2  | [`brent `](brent.f)  | find minimum of a function by Brent’s method |
